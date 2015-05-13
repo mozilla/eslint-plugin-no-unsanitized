@@ -13,12 +13,15 @@
         "eslint-tester": "^0.6.0",
         "mocha": "^2.2.4"
     },
+    "peerDependencies": {
+        "eslint": "^0.20.0"
+    },
     "homepage": "https://github.com/mozfreddyb/eslint-plugin-innerhtml/",
     "keywords": [
         "eslint",
         "eslint-plugin",
         "eslintplugin",
-        "lint"
+        "lint",
         "security"
     ],
     "license": "MPLv2",
