@@ -6,7 +6,7 @@
         "name": "Frederik Braun"
     },
     "bugs": {
-        "url": "https://github.com/mozfreddyb/eslint-plugin-innerhtml/issues"
+        "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
     },
     "devDependencies": {
         "eslint": "^0.20.0",
@@ -16,7 +16,7 @@
     "peerDependencies": {
         "eslint": "^0.20.0"
     },
-    "homepage": "https://github.com/mozfreddyb/eslint-plugin-innerhtml/",
+    "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
     "keywords": [
         "eslint",
         "eslint-plugin",
@@ -28,7 +28,7 @@
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mozfreddyb/eslint-plugin-innerhtml/issues"
+        "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
     },
     "scripts":{
         "test": "mocha tests/rules/",
