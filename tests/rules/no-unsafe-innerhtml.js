@@ -9,14 +9,14 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var eslint = require("../../../lib/eslint"),
+var eslint = require("eslint"),
     ESLintTester = require("eslint-tester");
 
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
 
-var eslintTester = new ESLintTester(eslint);
+var eslintTester = new ESLintTester(eslint.linter);
 eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
 
     // Examples of code that should not trigger the rule
@@ -68,6 +68,10 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
         {
             code: "i.innerHTML += Tagged.escapeHTML`foo${bar}baz`;",
             ecmaFeatures: { templateStrings: true }
+        },
+        {
+          code: "i.innerHTML += Tagged.unwrapSafeHTML(htmlSnippet)",
+          ecmaFeatures: { templateStrings: true }
         },
         // tests for insertAdjacentHTML calls
         {
