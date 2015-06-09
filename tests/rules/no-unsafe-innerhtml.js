@@ -33,15 +33,15 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "g.innerHTML = Tagged.escapeHTML``;",
+            code: "g.innerHTML = Sanitizer.escapeHTML``;",
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "h.innerHTML = Tagged.escapeHTML`foo`;",
+            code: "h.innerHTML = Sanitizer.escapeHTML`foo`;",
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "i.innerHTML = Tagged.escapeHTML`foo${bar}baz`;",
+            code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
             ecmaFeatures: { templateStrings: true }
         },
         // tests for innerHTML update (+= operator)
@@ -58,19 +58,19 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "g.innerHTML += Tagged.escapeHTML``;",
+            code: "g.innerHTML += Sanitizer.escapeHTML``;",
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "h.innerHTML += Tagged.escapeHTML`foo`;",
+            code: "h.innerHTML += Sanitizer.escapeHTML`foo`;",
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "i.innerHTML += Tagged.escapeHTML`foo${bar}baz`;",
+            code: "i.innerHTML += Sanitizer.escapeHTML`foo${bar}baz`;",
             ecmaFeatures: { templateStrings: true }
         },
         {
-          code: "i.innerHTML += Tagged.unwrapSafeHTML(htmlSnippet)",
+          code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
           ecmaFeatures: { templateStrings: true }
         },
         // tests for insertAdjacentHTML calls
@@ -83,7 +83,7 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
             ecmaFeatures: { templateStrings: true }
         },
         {
-            code: "n.insertAdjacentHTML('afterend', Tagged.escapeHTML`${title}`);",
+            code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
             ecmaFeatures: { templateStrings: true }
         },
         // override for manual review and legacy code
