@@ -1,7 +1,7 @@
 {
     "name": "eslint-plugin-no-unsafe-innerhtml",
     "description": "custom ESLint rule to disallows unsafe innerHTML, outerHTML and insertAdjacentHTML",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "author": {
         "name": "Frederik Braun"
     },

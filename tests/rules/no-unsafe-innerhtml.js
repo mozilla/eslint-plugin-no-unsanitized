@@ -21,7 +21,6 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
 
     // Examples of code that should not trigger the rule
     // XXX this does not find z['innerHTML'] and the like.
-    // XXX define a valid pattern that is for seemingly evil patterns, e.g. '//approved by fxossec bug <id>'
 
     valid: [
         // tests for innerHTML equals
