@@ -1,6 +1,6 @@
 # Disallow unsafe HTML templating (no-unsafe-innerhtml)
 
-This function disallows unsafe coding practices that may result into security vulnerabilities. We will disallow assignments to innerHTML as well as calls to insertAdjacentHTML without the use of a pre-defined escaping function. The escaping functions must be called with a template string. The function names are hardcoded as `Tagged.escapeHTML` and `escapeHTML`.
+This function disallows unsafe coding practices that may result into security vulnerabilities. We will disallow assignments to innerHTML as well as calls to insertAdjacentHTML without the use of a pre-defined escaping function. The escaping functions must be called with a template string. The function names are hardcoded as `Sanitizer.escapeHTML` and `escapeHTML`.
 
 ## Rule Details
 
