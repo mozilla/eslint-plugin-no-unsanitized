@@ -72,6 +72,10 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
           code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
           ecmaFeatures: { templateStrings: true }
         },
+        {
+          code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
+          ecmaFeatures: { templateStrings: true }
+        },
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
@@ -125,6 +129,15 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
                     type: "AssignmentExpression"
                 }
             ]
+        },
+        {
+             code: "m.outerHTML = htmlString;",
+             errors: [
+                {
+                     message: "Unsafe assignment to outerHTML",
+                     type: "AssignmentExpression"
+                }
+          ]
         },
         // insertAdjacentHTML examples
         {
