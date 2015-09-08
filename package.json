@@ -9,12 +9,10 @@
         "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
     },
     "devDependencies": {
-        "eslint": ">=0.24.0",
-        "eslint-tester": "0.8.1",
         "mocha": "^2.2.4"
     },
     "dependencies": {
-        "eslint": ">=0.24.0"
+        "eslint": "^1.1.0"
     },
     "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
     "keywords": [
@@ -24,7 +22,7 @@
         "lint",
         "security"
     ],
-    "license": "MPLv2",
+    "license": "MPL-2.0",
     "main": "index.js",
     "repository": {
         "type": "git",

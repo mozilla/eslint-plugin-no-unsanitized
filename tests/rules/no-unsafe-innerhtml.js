@@ -9,15 +9,16 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var eslint = require("eslint"),
-    ESLintTester = require("eslint-tester");
+var rule = require("../../lib/rules/no-unsafe-innerhtml");
+var RuleTester = require('eslint').RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
 
-var eslintTester = new ESLintTester(eslint.linter);
-eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
+var eslintTester = new RuleTester();
+
+eslintTester.run("no-unsafe-innerhtml", rule, {
 
     // Examples of code that should not trigger the rule
     // XXX this does not find z['innerHTML'] and the like.
