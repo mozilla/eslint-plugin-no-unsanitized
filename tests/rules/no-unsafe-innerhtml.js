@@ -103,7 +103,17 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
             ecmaFeatures: { templateStrings: true }
+        },
+        // document.write/writeln
+        {
+            code: "document.write('lulz');",
+            ecmaFeatures: { templateStrings: true }
+        },
+        {
+            code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            ecmaFeatures: { templateStrings: true }
         }
+
     ],
 
     // Examples of code that should trigger the rule
@@ -184,6 +194,25 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 {
                     message: "Unsafe assignment to innerHTML",
                     type: "AssignmentExpression"
+                }
+            ]
+        },
+        // document.write / writeln
+        {
+            code: "document.write('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to document.write",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "document.writeln(evil);",
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln",
+                    type: "CallExpression"
                 }
             ]
         }
