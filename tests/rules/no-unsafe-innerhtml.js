@@ -93,6 +93,15 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
             ecmaFeatures: { templateStrings: true }
+        },
+        // (binary) expressions
+        {
+            code: "x.innerHTML = `foo`+`bar`;",
+            ecmaFeatures: { templateStrings: true }
+        },
+        {
+            code: "y.innerHTML = '<span>' + 5 + '</span>';",
+            ecmaFeatures: { templateStrings: true }
         }
     ],
 
@@ -155,6 +164,25 @@ eslintTester.addRuleTest("lib/rules/no-unsafe-innerhtml", {
                 {
                     message: "Unsafe call to insertAdjacentHTML",
                     type: "CallExpression"
+                }
+            ]
+        },
+        // (binary) expressions
+        {
+            code: "node.innerHTML = '<span>'+ htmlInput;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "node.innerHTML = '<span>'+ htmlInput + '</span>';",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
                 }
             ]
         }

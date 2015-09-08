@@ -10,7 +10,7 @@
     },
     "devDependencies": {
         "eslint": ">=0.24.0",
-        "eslint-tester": ">=0.8.2",
+        "eslint-tester": "0.8.1",
         "mocha": "^2.2.4"
     },
     "dependencies": {
