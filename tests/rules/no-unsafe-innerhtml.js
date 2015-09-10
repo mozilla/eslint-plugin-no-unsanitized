@@ -1,16 +1,16 @@
+/* global require */
 /**
  * @fileoverview Test for no-unsafe-innerhtml rule
  * @author Frederik Braun
  * @copyright 2015 Mozilla Corporation. All rights reserved
  */
-"use strict";
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
 var rule = require("../../lib/rules/no-unsafe-innerhtml");
-var RuleTester = require('eslint').RuleTester;
+var RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
