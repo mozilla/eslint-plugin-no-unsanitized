@@ -1,16 +1,16 @@
+/* global require */
 /**
  * @fileoverview Test for no-unsafe-innerhtml rule
  * @author Frederik Braun
  * @copyright 2015 Mozilla Corporation. All rights reserved
  */
-"use strict";
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
 var rule = require("../../lib/rules/no-unsafe-innerhtml");
-var RuleTester = require('eslint').RuleTester;
+var RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
@@ -226,6 +226,26 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ]
-}
+        },
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1192595
+        {
+            code: "x.innerHTML = Sanitizer.escapeHTML(evil)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "x.innerHTML = Sanitizer.escapeHTML(`evil`)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            ecmaFeatures: { templateStrings: true }
+        }
     ]
 });
