@@ -226,6 +226,26 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ]
-}
+        },
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1192595
+        {
+            code: "x.innerHTML = Sanitizer.escapeHTML(evil)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "x.innerHTML = Sanitizer.escapeHTML(`evil`)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            ecmaFeatures: { templateStrings: true }
+        }
     ]
 });
