@@ -1,7 +1,7 @@
 {
     "name": "eslint-plugin-no-unsafe-innerhtml",
     "description": "custom ESLint rule to disallows unsafe innerHTML, outerHTML and insertAdjacentHTML",
-    "version": "0.1.11",
+    "version": "0.1.12",
     "author": {
         "name": "Frederik Braun"
     },
@@ -12,7 +12,7 @@
         "mocha": "^2.2.4"
     },
     "dependencies": {
-        "eslint": "^1.1.0"
+        "eslint": "^1.4.1"
     },
     "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
     "keywords": [
@@ -30,6 +30,6 @@
     },
     "scripts":{
         "test": "mocha tests/rules/",
-        "lint": "eslint index.js lib/**/*.js tests/**/*.js"
+        "lint": "node_modules/.bin/eslint index.js lib/**/*.js tests/**/*.js"
     }
 }
