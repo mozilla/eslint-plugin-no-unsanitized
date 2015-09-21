@@ -18,6 +18,8 @@ var RuleTester = require("eslint").RuleTester;
 
 var eslintTester = new RuleTester();
 
+var features = { templateStrings: true, spread: true };
+
 eslintTester.run("no-unsafe-innerhtml", rule, {
 
     // Examples of code that should not trigger the rule
@@ -25,93 +27,99 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
 
     valid: [
         // tests for innerHTML equals
-        { code: "a.innerHTML = '';",
-            ecmaFeatures: { templateStrings: true }
+        {
+            code: "a.innerHTML = '';",
+            ecmaFeatures: features
         },
         {
             code: "c.innerHTML = ``;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "g.innerHTML = Sanitizer.escapeHTML``;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "h.innerHTML = Sanitizer.escapeHTML`foo`;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         // tests for innerHTML update (+= operator)
         {
             code: "a.innerHTML += '';",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "b.innerHTML += \"\";",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "c.innerHTML += ``;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "g.innerHTML += Sanitizer.escapeHTML``;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "h.innerHTML += Sanitizer.escapeHTML`foo`;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "i.innerHTML += Sanitizer.escapeHTML`foo${bar}baz`;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
           code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-          ecmaFeatures: { templateStrings: true }
+          ecmaFeatures: features
         },
         {
           code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-          ecmaFeatures: { templateStrings: true }
+          ecmaFeatures: features
+        },
+        // testing unwrapSafeHTML spread
+        {
+          code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
+          ecmaFeatures: features
         },
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "n.insertAdjacentHTML('afterend', `<br>`);",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         // override for manual review and legacy code
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         // document.write/writeln
         {
             code: "document.write('lulz');",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         }
 
     ],
@@ -245,7 +253,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            ecmaFeatures: { templateStrings: true }
+            ecmaFeatures: features
         }
     ]
 });
