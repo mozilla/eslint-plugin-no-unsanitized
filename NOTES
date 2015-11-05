@@ -1,0 +1,7 @@
+= Making a release =
+
+* Bump version in package.json
+* git commit
+* git push
+* wait for travis results
+* npm publish
