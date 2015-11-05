@@ -120,8 +120,20 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
             ecmaFeatures: features
-        }
-
+        },
+        // template string expression tests
+        {
+            code: "u.innerHTML = `<span>${'lulz'}</span>`;",
+            ecmaFeatures: features
+        },
+        {
+            code: "v.innerHTML = `<span>${'lulz'}</span>${55}`;",
+            ecmaFeatures: features
+        },
+        {
+            code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
+            ecmaFeatures: features
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -159,13 +171,33 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             ]
         },
         {
-             code: "m.outerHTML = htmlString;",
-             errors: [
+            code: "m.outerHTML = htmlString;",
+            errors: [
                 {
                      message: "Unsafe assignment to outerHTML",
                      type: "AssignmentExpression"
                 }
-          ]
+            ]
+        },
+        {
+            code: "t.innerHTML = `<span>${name}</span>`;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            ecmaFeatures: features
+        },
+        {
+            code: "t.innerHTML = `<span>${'foobar'}</span>${evil}`;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            ecmaFeatures: features
         },
         // insertAdjacentHTML examples
         {
