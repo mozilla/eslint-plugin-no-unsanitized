@@ -1,5 +1,7 @@
 = Making a release =
-
+* Check everything locally:
+** `npm run test`
+** `npm run lint`
 * Bump version in package.json
 * git commit
 * git push
