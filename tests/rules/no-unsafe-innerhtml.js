@@ -73,17 +73,17 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             ecmaFeatures: features
         },
         {
-          code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-          ecmaFeatures: features
+            code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
+            ecmaFeatures: features
         },
         {
-          code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-          ecmaFeatures: features
+            code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
+            ecmaFeatures: features
         },
         // testing unwrapSafeHTML spread
         {
-          code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
-          ecmaFeatures: features
+            code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
+            ecmaFeatures: features
         },
         // tests for insertAdjacentHTML calls
         {
@@ -133,7 +133,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         {
             code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
             ecmaFeatures: features
-        },
+        }
     ],
 
     // Examples of code that should trigger the rule
@@ -174,8 +174,8 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "m.outerHTML = htmlString;",
             errors: [
                 {
-                     message: "Unsafe assignment to outerHTML",
-                     type: "AssignmentExpression"
+                    message: "Unsafe assignment to outerHTML",
+                    type: "AssignmentExpression"
                 }
             ]
         },
