@@ -11,6 +11,12 @@
 
 var rule = require("../../lib/rules/no-unsafe-innerhtml");
 var RuleTester = require("eslint").RuleTester;
+var atob = function(b64string) { return new Buffer(b64string, 'base64').toString('binary') }
+var btoa = function btoa(str) {
+    if (Buffer.byteLength(str) !== str.length)
+      throw new Error('bad string!');
+      return Buffer(str, 'binary').toString('base64');
+};
 
 //------------------------------------------------------------------------------
 // Tests
@@ -45,6 +51,11 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         },
         {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
+            ecmaFeatures: features
+        },
+        // just a new-line concat of static strings
+        {
+            code: 'container.innerHTML = "<div id=\\"highlighted-rect\\" " + "class=\\"highlighted-rect\\" hidden=\\"true\\">";',
             ecmaFeatures: features
         },
         // tests for innerHTML update (+= operator)
