@@ -18,8 +18,6 @@ var RuleTester = require("eslint").RuleTester;
 
 var eslintTester = new RuleTester();
 
-var features = { templateStrings: true, spread: true };
-
 eslintTester.run("no-unsafe-innerhtml", rule, {
 
     // Examples of code that should not trigger the rule
@@ -29,110 +27,110 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         // tests for innerHTML equals
         {
             code: "a.innerHTML = '';",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "c.innerHTML = ``;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "g.innerHTML = Sanitizer.escapeHTML``;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "h.innerHTML = Sanitizer.escapeHTML`foo`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // tests for innerHTML update (+= operator)
         {
             code: "a.innerHTML += '';",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "b.innerHTML += \"\";",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "c.innerHTML += ``;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "g.innerHTML += Sanitizer.escapeHTML``;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "h.innerHTML += Sanitizer.escapeHTML`foo`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "i.innerHTML += Sanitizer.escapeHTML`foo${bar}baz`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // testing unwrapSafeHTML spread
         {
             code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "n.insertAdjacentHTML('afterend', `<br>`);",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // override for manual review and legacy code
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // document.write/writeln
         {
             code: "document.write('lulz');",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // template string expression tests
         {
             code: "u.innerHTML = `<span>${'lulz'}</span>`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "v.innerHTML = `<span>${'lulz'}</span>${55}`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         }
     ],
 
@@ -187,7 +185,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "t.innerHTML = `<span>${'foobar'}</span>${evil}`;",
@@ -197,7 +195,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
         },
         // insertAdjacentHTML examples
         {
@@ -285,7 +283,27 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            ecmaFeatures: features
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
         }
     ]
 });
