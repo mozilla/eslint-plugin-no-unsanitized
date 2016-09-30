@@ -18,7 +18,7 @@ var RuleTester = require("eslint").RuleTester;
 
 var eslintTester = new RuleTester();
 
-var features = { templateStrings: true, spread: true };
+var features = { templateStrings: true, spread: true, arrowFunctions: true };
 
 eslintTester.run("no-unsafe-innerhtml", rule, {
 
@@ -279,6 +279,16 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
         },
         {
             code: "x.innerHTML = Sanitizer.escapeHTML(`evil`)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            ecmaFeatures: features
+        },
+        {
+            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
