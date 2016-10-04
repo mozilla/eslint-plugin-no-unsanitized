@@ -1,8 +1,10 @@
 language: node_js
 node_js:
-  - 0.10
+  - "4"
+  - "node"
 branches:
   only:
     - master
+    - /^greenkeeper-.*$/
 before_script:
   - npm run lint

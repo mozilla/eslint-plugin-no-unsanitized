@@ -304,6 +304,16 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
         }
     ]
 });
