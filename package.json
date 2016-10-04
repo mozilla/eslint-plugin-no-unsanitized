@@ -9,10 +9,10 @@
         "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
     },
     "devDependencies": {
-        "mocha": "^2.2.4"
+        "mocha": "^3.1.0"
     },
     "dependencies": {
-        "eslint": "^1.4.1"
+        "eslint": "^3.6.1"
     },
     "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
     "keywords": [
