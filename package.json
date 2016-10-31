@@ -12,7 +12,7 @@
         "mocha": "^3.1.0"
     },
     "dependencies": {
-        "eslint": "^3.7.1"
+        "eslint": "^3.9.1"
     },
     "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
     "keywords": [
