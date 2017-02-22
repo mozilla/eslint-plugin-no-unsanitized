@@ -116,6 +116,10 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "document.write();",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 }
         },
