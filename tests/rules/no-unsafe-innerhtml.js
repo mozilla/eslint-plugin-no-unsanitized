@@ -96,11 +96,6 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
             parserOptions: { ecmaVersion: 6 }
         },
-        // override for manual review and legacy code
-        {
-            code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
-            parserOptions: { ecmaVersion: 6 }
-        },
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
@@ -318,6 +313,16 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
-        }
+        },
+        // the previous override for manual review and legacy code is now invalid
+        {
+            code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
     ]
 });
