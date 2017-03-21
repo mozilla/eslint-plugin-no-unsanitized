@@ -1,5 +1,17 @@
 {
     "rules": {
+        "prefer-template": [
+            2
+        ],
+        "object-shorthand": [
+            2
+        ],
+        "prefer-const": [
+            2
+        ],
+        "no-var": [
+            2
+        ],
         "indent": [
             2,
             4

@@ -9,14 +9,14 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-var rule = require("../../lib/rules/no-unsafe-innerhtml");
-var RuleTester = require("eslint").RuleTester;
+const rule = require("../../lib/rules/no-unsafe-innerhtml");
+const RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
 
-var eslintTester = new RuleTester();
+const eslintTester = new RuleTester();
 
 eslintTester.run("no-unsafe-innerhtml", rule, {
 
