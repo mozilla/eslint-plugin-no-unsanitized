@@ -30,6 +30,10 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "a.innerHTML *= 'test';",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "c.innerHTML = ``;",
             parserOptions: { ecmaVersion: 6 }
         },
@@ -45,6 +49,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // tests for innerHTML update (+= operator)
         {
             code: "a.innerHTML += '';",
@@ -78,11 +83,13 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // testing unwrapSafeHTML spread
         {
             code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
@@ -96,6 +103,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
@@ -105,6 +113,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // document.write/writeln
         {
             code: "document.write('lulz');",
@@ -118,6 +127,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 }
         },
+
         // template string expression tests
         {
             code: "u.innerHTML = `<span>${'lulz'}</span>`;",
@@ -196,6 +206,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
+
         // insertAdjacentHTML examples
         {
             code: "node.insertAdjacentHTML('beforebegin', htmlString);",
@@ -215,6 +226,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ]
         },
+
         // (binary) expressions
         {
             code: "node.innerHTML = '<span>'+ htmlInput;",
@@ -234,6 +246,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ]
         },
+
         // document.write / writeln
         {
             code: "document.write('<span>'+ htmlInput + '</span>');",
@@ -253,6 +266,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ]
         },
+
         // bug https://bugzilla.mozilla.org/show_bug.cgi?id=1198200
         {
             code: "title.innerHTML = _('WB_LT_TIPS_S_SEARCH'," +
@@ -264,6 +278,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
                 }
             ]
         },
+
         // https://bugzilla.mozilla.org/show_bug.cgi?id=1192595
         {
             code: "x.innerHTML = Sanitizer.escapeHTML(evil)",
@@ -314,6 +329,7 @@ eslintTester.run("no-unsafe-innerhtml", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
+
         // the previous override for manual review and legacy code is now invalid
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
