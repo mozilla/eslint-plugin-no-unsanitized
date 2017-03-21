@@ -3,6 +3,7 @@
 ** `npm run test`
 ** `npm run lint`
 * Bump version in package.json
+* git add
 * git commit
 * git push
 * wait for travis results
