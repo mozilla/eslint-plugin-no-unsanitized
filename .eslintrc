@@ -27,6 +27,10 @@
         "semi": [
             2,
             "always"
+        ],
+        "space-in-parens": [
+            2,
+            "never"
         ]
     },
     "env": {
