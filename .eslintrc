@@ -1,5 +1,14 @@
 {
     "rules": {
+        "lines-around-comment": [
+            2,
+            {
+                "allowArrayStart": true,
+                "allowBlockStart": true,
+                "beforeBlockComment": false,
+                "beforeLineComment": true
+            }
+        ],
         "prefer-template": [
             2
         ],
