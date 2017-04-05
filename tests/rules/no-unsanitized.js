@@ -1,15 +1,15 @@
 /* global require */
 /**
- * @fileoverview Test for no-unsafe-innerhtml rule
- * @author Frederik Braun
- * @copyright 2015 Mozilla Corporation. All rights reserved
+ * @fileoverview Test for no-unsanitized rule
+ * @author Frederik Braun et al.
+ * @copyright 2015-2017 Mozilla Corporation. All rights reserved
  */
 
 //------------------------------------------------------------------------------
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../lib/rules/no-unsafe-innerhtml");
+const rule = require("../../lib/rules/no-unsanitized");
 const RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ const RuleTester = require("eslint").RuleTester;
 
 const eslintTester = new RuleTester();
 
-eslintTester.run("no-unsafe-innerhtml", rule, {
+eslintTester.run("no-unsanitized", rule, {
 
     // Examples of code that should not trigger the rule
     // XXX this does not find z['innerHTML'] and the like.
