@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/mozfreddyb/eslint-plugin-no-unsafe-innerhtml.svg?branch=master)](https://travis-ci.org/mozfreddyb/eslint-plugin-no-unsafe-innerhtml)
-# Disallow unsafe HTML templating (no-unsafe-innerhtml)
+[![Build Status](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized.svg?branch=master)](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized)
+# Disallow unsanitized DOM access (no-unsanitized)
 
 This function disallows unsafe coding practices that may result into security vulnerabilities. We will disallow assignments to innerHTML as well as calls to insertAdjacentHTML without the use of a pre-defined escaping function. The escaping functions must be called with a template string. The function names are hardcoded as `Sanitizer.escapeHTML` and `escapeHTML`.
 
@@ -24,4 +24,4 @@ bar.innerHTML = escapeHTML`<a href='${url}'>About</a>`;
 ```
 
 
-This rule is being used within Mozilla to maintain and improve the security of the Firefox OS front-end codebase *Gaia*. Further documentation, which includes references to the escaping functions can be found on [MDN](https://developer.mozilla.org/en-US/Firefox_OS/Security/Security_Automation).
+This rule is being used within Mozilla to maintain and improve the security of our products and services.

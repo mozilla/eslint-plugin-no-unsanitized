@@ -1,20 +1,20 @@
 {
-    "name": "eslint-plugin-no-unsafe-innerhtml",
-    "description": "custom ESLint rule to disallows unsafe innerHTML, outerHTML and insertAdjacentHTML",
-    "version": "1.0.16",
+    "name": "eslint-plugin-no-unsanitized",
+    "description": "ESLint rule to disallow unsanitized DOM access",
+    "version": "1.1.0",
     "author": {
-        "name": "Frederik Braun"
+        "name": "Frederik Braun et al."
     },
     "bugs": {
-        "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
+        "url": "https://github.com/mozilla/eslint-plugin-no-unsanitized/issues"
     },
     "devDependencies": {
         "mocha": "^3.2.0"
     },
     "dependencies": {
-        "eslint": "^3.7.1"
+        "eslint": "^3.19.0"
     },
-    "homepage": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/",
+    "homepage": "https://github.com/mozilla/eslint-plugin-no-unsanitized/",
     "keywords": [
         "eslint",
         "eslint-plugin",
@@ -26,7 +26,7 @@
     "main": "index.js",
     "repository": {
         "type": "git",
-        "url": "https://github.com/mozfreddyb/eslint-plugin-no-unsafe-innerhtml/issues"
+        "url": "https://github.com/mozilla/eslint-plugin-no-unsanitized/issues"
     },
     "scripts":{
         "test": "./node_modules/.bin/mocha tests/rules/",
