@@ -9,7 +9,7 @@
 // Requirements
 //------------------------------------------------------------------------------
 
-const rule = require("../../lib/rules/no-unsanitized");
+const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
 
 //------------------------------------------------------------------------------
@@ -18,7 +18,7 @@ const RuleTester = require("eslint").RuleTester;
 
 const eslintTester = new RuleTester();
 
-eslintTester.run("no-unsanitized", rule, {
+eslintTester.run("property", rule, {
 
     // Examples of code that should not trigger the rule
     // XXX this does not find z['innerHTML'] and the like.
@@ -84,26 +84,6 @@ eslintTester.run("no-unsanitized", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-        // testing unwrapSafeHTML spread
-        {
-            code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
-            parserOptions: { ecmaVersion: 6 }
-        },
-
-        // tests for insertAdjacentHTML calls
-        {
-            code: "n.insertAdjacentHTML('afterend', 'meh');",
-            parserOptions: { ecmaVersion: 6 }
-        },
-        {
-            code: "n.insertAdjacentHTML('afterend', `<br>`);",
-            parserOptions: { ecmaVersion: 6 }
-        },
-        {
-            code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
-            parserOptions: { ecmaVersion: 6 }
-        },
-
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
@@ -114,15 +94,6 @@ eslintTester.run("no-unsanitized", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-        // document.write/writeln
-        {
-            code: "document.write('lulz');",
-            parserOptions: { ecmaVersion: 6 }
-        },
-        {
-            code: "document.write();",
-            parserOptions: { ecmaVersion: 6 }
-        },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 }
@@ -207,26 +178,6 @@ eslintTester.run("no-unsanitized", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-        // insertAdjacentHTML examples
-        {
-            code: "node.insertAdjacentHTML('beforebegin', htmlString);",
-            errors: [
-                {
-                    message: "Unsafe call to insertAdjacentHTML",
-                    type: "CallExpression"
-                }
-            ]
-        },
-        {
-            code: "node.insertAdjacentHTML('beforebegin', template.getHTML());",
-            errors: [
-                {
-                    message: "Unsafe call to insertAdjacentHTML",
-                    type: "CallExpression"
-                }
-            ]
-        },
-
         // (binary) expressions
         {
             code: "node.innerHTML = '<span>'+ htmlInput;",
@@ -243,26 +194,6 @@ eslintTester.run("no-unsanitized", rule, {
                 {
                     message: "Unsafe assignment to innerHTML",
                     type: "AssignmentExpression"
-                }
-            ]
-        },
-
-        // document.write / writeln
-        {
-            code: "document.write('<span>'+ htmlInput + '</span>');",
-            errors: [
-                {
-                    message: "Unsafe call to document.write",
-                    type: "CallExpression"
-                }
-            ]
-        },
-        {
-            code: "document.writeln(evil);",
-            errors: [
-                {
-                    message: "Unsafe call to document.writeln",
-                    type: "CallExpression"
                 }
             ]
         },
