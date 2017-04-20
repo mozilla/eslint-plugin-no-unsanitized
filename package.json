@@ -30,6 +30,6 @@
     },
     "scripts":{
         "test": "./node_modules/.bin/mocha tests/rules/",
-        "lint": "./node_modules/.bin/eslint index.js lib/**/*.js tests/**/*.js"
+        "lint": "./node_modules/.bin/eslint index.js lib/*.js lib/**/*.js tests/**/*.js"
     }
 }

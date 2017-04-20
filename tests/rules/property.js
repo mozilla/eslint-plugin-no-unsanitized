@@ -111,7 +111,19 @@ eslintTester.run("property", rule, {
         {
             code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
             parserOptions: { ecmaVersion: 6 }
-        }
+        },
+
+        // testing unwrapSafeHTML spread
+        {
+            code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+
+        // Native method (Check customize code doesn't include these)
+        {
+            code: "document.toString = evil;"
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -260,6 +272,19 @@ eslintTester.run("property", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
+
+        // testing unwrapSafeHTML spread sanitizer typo
+        {
+            code: "this.imeList.innerHTML = Sanitizer.unrapSafeHTML(...listHtml);",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
 
         // the previous override for manual review and legacy code is now invalid
         {
