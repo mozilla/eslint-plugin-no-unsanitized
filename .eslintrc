@@ -1,51 +1,57 @@
 {
-    "rules": {
-        "lines-around-comment": [
-            2,
-            {
-                "allowArrayStart": true,
-                "allowBlockStart": true,
-                "beforeBlockComment": false,
-                "beforeLineComment": true
-            }
-        ],
-        "prefer-template": [
-            2
-        ],
-        "object-shorthand": [
-            2
-        ],
-        "prefer-const": [
-            2
-        ],
-        "no-var": [
-            2
-        ],
-        "indent": [
-            2,
-            4
-        ],
-        "quotes": [
-            2,
-            "double"
-        ],
-        "linebreak-style": [
-            2,
-            "unix"
-        ],
-        "semi": [
-            2,
-            "always"
-        ],
-        "space-in-parens": [
-            2,
-            "never"
-        ]
-    },
-    "env": {
-        "es6": true,
-        "browser": true,
-        "node": true,
-    },
-    "extends": "eslint:recommended"
+  "rules": {
+    "lines-around-comment": [
+      2,
+      {
+        "allowArrayStart": true,
+        "allowBlockStart": true,
+        "beforeBlockComment": false,
+        "beforeLineComment": true
+      }
+    ],
+    "prefer-template": [
+      2
+    ],
+    "object-shorthand": [
+      2
+    ],
+    "prefer-const": [
+      2
+    ],
+    "no-var": [
+      2
+    ],
+    "indent": [
+      2,
+      4
+    ],
+    "quotes": [
+      2,
+      "double"
+    ],
+    "linebreak-style": [
+      2,
+      "unix"
+    ],
+    "semi": [
+      2,
+      "always"
+    ],
+    "space-in-parens": [
+      2,
+      "never"
+    ],
+    "valid-jsdoc": [
+      2
+    ],
+    "require-jsdoc": [
+      2
+    ]
+  },
+  "env": {
+    "es6": true,
+    "browser": true,
+    "node": true,
+  },
+  "extends": "eslint:recommended"
 }
