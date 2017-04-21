@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized.svg?branch=master)](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized)
-# Disallow unsanitized DOM access (no-unsanitized)
+# Disallow unsanitized code (no-unsanitized)
 
 These rules disallow unsafe coding practices that may result into security vulnerabilities. We will disallow assignments to innerHTML as well as calls to insertAdjacentHTML without the use of a pre-defined escaping function. The escaping functions must be called with a template string. The function names are hardcoded as `Sanitizer.escapeHTML` and `escapeHTML`.
 
@@ -31,6 +31,7 @@ This rule is being used within Mozilla to maintain and improve the security of o
 
 In your eslint.json file enable this rule with the following:
 
+
 ```
 {
     "plugins": ["no-unsanitized"],
@@ -40,3 +41,39 @@ In your eslint.json file enable this rule with the following:
     }
 }
 ```
+
+## Advanced configuration
+
+```js
+{
+    "plugins": ["no-unsanitized"],
+    "env": {
+        "no-unsanitized/method": [
+            "error",
+            {
+                disableDefault: true,
+                escape: {
+                    taggedTemplates: ["safeHTML"]
+                }
+            },
+            {
+                html: {
+                    properties: [0]
+                }
+            }
+        ],
+        "no-unsanitized/method": [
+            "error",
+            {
+            },
+            {
+                innerHTML: {
+                    objectMatches: ["document.*"]
+                }
+            }
+        ]
+    }
+}
+```
+
+[To see all available options vitit](./SCHEMA.md)

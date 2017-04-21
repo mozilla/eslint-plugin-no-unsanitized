@@ -24,12 +24,6 @@ eslintTester.run("method", rule, {
     // XXX this does not find z['innerHTML'] and the like.
 
     valid: [
-        // testing unwrapSafeHTML spread
-        {
-            code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
-            parserOptions: { ecmaVersion: 6 }
-        },
-
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
@@ -57,6 +51,51 @@ eslintTester.run("method", rule, {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "otherNodeWeDontCheckFor.writeln(evil);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Native method (Check customize code doesn't include these)
+        {
+            code: "document.toString(evil);"
+        },
+
+        {
+            code: "document.write(escaper(x))",
+            options: [
+                {
+                    escape: {
+                        methods: ["escaper"]
+                    }
+                }
+            ]
+        },
+
+        // Checking write can be overriden
+        {
+            code: "document.write(evilest)",
+            options: [
+                {
+                    objectMatches: ["document", "documentFun"]
+                },
+                {
+                    write: {
+                        objectMatches: ["thing"]
+                    }
+                }
+            ]
+        },
+
+        // Checking disableDefault can remove the default rules
+        {
+            code: "document.write(evil)",
+            options: [
+                {
+                    defaultDisable: true
+                }
+            ]
+        }
     ],
 
     // Examples of code that should trigger the rule
@@ -72,7 +111,7 @@ eslintTester.run("method", rule, {
             code: "node.insertAdjacentHTML('beforebegin', htmlString);",
             errors: [
                 {
-                    message: "Unsafe call to insertAdjacentHTML",
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
                     type: "CallExpression"
                 }
             ]
@@ -81,7 +120,7 @@ eslintTester.run("method", rule, {
             code: "node.insertAdjacentHTML('beforebegin', template.getHTML());",
             errors: [
                 {
-                    message: "Unsafe call to insertAdjacentHTML",
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
                     type: "CallExpression"
                 }
             ]
@@ -92,7 +131,25 @@ eslintTester.run("method", rule, {
             code: "document.write('<span>'+ htmlInput + '</span>');",
             errors: [
                 {
-                    message: "Unsafe call to document.write",
+                    message: "Unsafe call to document.write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "documentish.write('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to documentish.write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "documentIframe.write('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to documentIframe.write for argument 0",
                     type: "CallExpression"
                 }
             ]
@@ -101,11 +158,56 @@ eslintTester.run("method", rule, {
             code: "document.writeln(evil);",
             errors: [
                 {
-                    message: "Unsafe call to document.writeln",
+                    message: "Unsafe call to document.writeln for argument 0",
                     type: "CallExpression"
                 }
             ]
         },
 
+        // Broken config
+        {
+            code: "b.boop(pie)",
+            options: [
+                {
+                },
+                {
+                    boop: {
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Method check requires properties array in eslint rule boop",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        // Checking disableDefault can remove the default rules but also add more
+        {
+            code: "document.write(evil); b.thing(x); b.other(me);",
+            options: [
+                {
+                    defaultDisable: true
+                },
+                {
+                    thing: {
+                    },
+                    other: {
+                        properties: [0]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Method check requires properties array in eslint rule thing",
+                    type: "CallExpression"
+                },
+                {
+                    message: "Unsafe call to b.other for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        }
     ]
 });
