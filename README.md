@@ -26,12 +26,27 @@ bar.innerHTML = escapeHTML`<a href='${url}'>About</a>`;
 
 This rule is being used within Mozilla to maintain and improve the security of our products and services.
 
+## Install
+
+With **yarn** or **npm**:
+```
+$ yarn add -D eslint-plugin-no-unsanitized
+$ npm install --save-dev eslint-plugin-no-unsanitized
+```
 
 ## Usage
 
 In your eslint.json file enable this rule with the following:
 
+```
+{
 
+    "plugins": ["no-unsanitized"],
+    "extends": ["plugin:no-unsanitized/DOM"]
+}
+```
+
+Or:
 ```
 {
     "plugins": ["no-unsanitized"],
@@ -76,4 +91,4 @@ In your eslint.json file enable this rule with the following:
 }
 ```
 
-[To see all available options vitit](./SCHEMA.md)
+[See all available options](./SCHEMA.md)

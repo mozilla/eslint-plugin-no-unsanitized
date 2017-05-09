@@ -1,7 +1,7 @@
 {
     "name": "eslint-plugin-no-unsanitized",
-    "description": "ESLint rule to disallow unsanitized DOM access",
-    "version": "1.1.0",
+    "description": "ESLint rule to disallow unsanitized code",
+    "version": "2.0.0",
     "author": {
         "name": "Frederik Braun et al."
     },
@@ -20,6 +20,8 @@
         "eslint-plugin",
         "eslintplugin",
         "lint",
+        "sanitize",
+        "innerHTML",
         "security"
     ],
     "license": "MPL-2.0",
