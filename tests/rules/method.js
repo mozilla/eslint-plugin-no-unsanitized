@@ -95,7 +95,7 @@ eslintTester.run("method", rule, {
                     defaultDisable: true
                 }
             ]
-        }
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -205,6 +205,16 @@ eslintTester.run("method", rule, {
                 },
                 {
                     message: "Unsafe call to b.other for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        // Parser errors
+        {
+            code: "getDocument(myID).write(evil)",
+            errors: [
+                {
+                    message: "Unsafe call to getDocument(myID).write for argument 0",
                     type: "CallExpression"
                 }
             ]
