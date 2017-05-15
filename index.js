@@ -4,10 +4,10 @@ module.exports = {
         "property": require("./lib/rules/property"),
         "method": require("./lib/rules/method")
     },
-    config: {
+    configs: {
         DOM: {
             rules: {
-                "property": [
+                "no-unsanitized/property": [
                     "error",
                     {
                     },
@@ -20,7 +20,7 @@ module.exports = {
                         outerHTML: {},
                     }
                 ],
-                "method": [
+                "no-unsanitized/method": [
                     "error",
                     {
                     },

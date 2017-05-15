@@ -80,6 +80,9 @@ Or:
         "no-unsanitized/method": [
             "error",
             {
+                escape: {
+                    taggedTemplates: ["safeHTML"]
+                }
             },
             {
                 innerHTML: {
