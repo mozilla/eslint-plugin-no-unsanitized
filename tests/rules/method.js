@@ -209,6 +209,7 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+
         // Parser errors
         {
             code: "getDocument(myID).write(evil)",
