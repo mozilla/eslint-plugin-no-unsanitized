@@ -210,7 +210,7 @@ eslintTester.run("method", rule, {
             ]
         },
 
-        // Parser errors
+        // Test that stem from former parser errors and breakage
         {
             code: "getDocument(myID).write(evil)",
             errors: [
