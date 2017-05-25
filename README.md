@@ -50,7 +50,7 @@ Or:
 ```
 {
     "plugins": ["no-unsanitized"],
-    "env": {
+    "rules": {
         "no-unsanitized/method": "error",
         "no-unsanitized/property": "error"
     }
@@ -62,7 +62,7 @@ Or:
 ```js
 {
     "plugins": ["no-unsanitized"],
-    "env": {
+    "rules": {
         "no-unsanitized/method": [
             "error",
             {
