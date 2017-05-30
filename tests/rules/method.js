@@ -96,6 +96,11 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+
+        // rule should not barf on a CallExpression result being called again
+        {
+            code: "  _tests.shift()();",
+        }
     ],
 
     // Examples of code that should trigger the rule
