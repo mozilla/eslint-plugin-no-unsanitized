@@ -103,7 +103,14 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(Async.checkAppReady = function() { return true; })();"
-        }        
+        },
+        {
+            code: "let endTime = (mapEnd || (e => e.delta))(this._data[this._data.length - 1]);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "(text.endsWith('\\n') ? document.write : document.writeln)(text)"
+        }
     ],
 
     // Examples of code that should trigger the rule
