@@ -110,6 +110,11 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(text.endsWith('\\n') ? document.write : document.writeln)(text)"
+        },
+
+        // issue 71 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/71
+        {
+            code: "function foo() { return this().bar(); };",
         }
     ],
 
