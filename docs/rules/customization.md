@@ -25,6 +25,43 @@ dangers variable input
 }
 ```
 
+## Advanced configuration
+
+```js
+{
+    "plugins": ["no-unsanitized"],
+    "rules": {
+        "no-unsanitized/method": [
+            "error",
+            {
+                disableDefault: true,
+                escape: {
+                    taggedTemplates: ["safeHTML"]
+                }
+            },
+            {
+                html: {
+                    properties: [0]
+                }
+            }
+        ],
+        "no-unsanitized/method": [
+            "error",
+            {
+                escape: {
+                    taggedTemplates: ["safeHTML"]
+                }
+            },
+            {
+                innerHTML: {
+                    objectMatches: ["document.*"]
+                }
+            }
+        ]
+    }
+}
+```
+
 ### Override list of escaping functions for property assignments only 
 TBD
 
