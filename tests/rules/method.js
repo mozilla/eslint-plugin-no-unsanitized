@@ -110,6 +110,11 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(text.endsWith('\\n') ? document.write : document.writeln)(text)"
+        },
+
+        // issue 71 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/71
+        {
+            code: "function foo() { return this().bar(); };",
         }
     ],
 
@@ -177,6 +182,27 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ]
+        },
+        {
+            code: "window.document.writeln(bad);",
+            errors: [
+                {
+                    message: "Unsafe call to window.document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        // issue 71 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/71
+        {
+            code: "function foo() { return this().insertAdjacentHTML(foo, bar); };",
+            errors: [
+                {
+                    message: "Unsafe call to this().insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
         },
 
         // Broken config
