@@ -294,7 +294,19 @@ eslintTester.run("property", rule, {
                     message: "Unsafe assignment to innerHTML",
                     type: "AssignmentExpression"
                 }
-            ]
+            ],
+            parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "function foo() { return this().innerHTML = evil; };",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
     ]
 });
