@@ -115,6 +115,11 @@ eslintTester.run("method", rule, {
         // issue 71 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/71
         {
             code: "function foo() { return this().bar(); };",
+        },
+
+        // issue 73 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/73
+        {
+            code: "new Function()();",
         }
     ],
 
