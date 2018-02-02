@@ -9,10 +9,11 @@
         "url": "https://github.com/mozilla/eslint-plugin-no-unsanitized/issues"
     },
     "devDependencies": {
-        "mocha": "^3.2.0"
-    },
-    "dependencies": {
+        "mocha": "^3.2.0",
         "eslint": "^4.16.0"
+    },
+    "peerDependencies": {
+        "eslint": ">=3"
     },
     "homepage": "https://github.com/mozilla/eslint-plugin-no-unsanitized/",
     "keywords": [
