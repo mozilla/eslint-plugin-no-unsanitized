@@ -120,6 +120,32 @@ eslintTester.run("method", rule, {
         // issue 73 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/73
         {
             code: "new Function()();",
+        },
+        { // issue 79
+            code: "range.createContextualFragment('<p class=\"greeting\">Hello!</p>');"
+        },
+        { // issue 79
+            code: "range.createContextualFragment(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+
+                    escape: {
+                        methods: ["escaper"]
+                    }
+                }
+            ]
+        },
+        { // issue 79
+            code: "range.createContextualFragment(escaper('<em>'+evil+'</em>'));",
+            options: [
+                {
+
+                    escape: {
+                        methods: ["escaper"]
+                    }
+                }
+            ]
         }
     ],
 
@@ -262,6 +288,17 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to getDocument(myID).write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        // Issue 79: Warn for use of createContextualFragment
+        {
+            code: "range.createContextualFragment(badness)",
+            errors: [
+                {
+                    message: "Unsafe call to range.createContextualFragment for argument 0",
                     type: "CallExpression"
                 }
             ]
