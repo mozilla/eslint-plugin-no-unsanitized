@@ -146,7 +146,13 @@ eslintTester.run("method", rule, {
                     }
                 }
             ]
-        }
+        },
+
+        // Issue 83: Support import() expressions as parsed by babel-eslint
+        {
+            code: "import('lodash')",
+            parser: "babel-eslint"
+        },
     ],
 
     // Examples of code that should trigger the rule
