@@ -11,7 +11,7 @@
     "devDependencies": {
         "babel-eslint": "^8.2.3",
         "eslint": "^4.16.0",
-        "mocha": "^3.2.0"
+        "mocha": "^5.1.1"
     },
     "peerDependencies": {
         "eslint": ">=3"
