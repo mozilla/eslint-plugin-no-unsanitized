@@ -15,12 +15,12 @@ of our products and services.
 ## method
 The *method* rule disallows certain function calls.
 E.g., `document.write()` or `insertAdjacentHTML()`.
-See [docs/method.md](docs/method.md) for more.
+See [docs/rules/method.md](docs/rules/method.md) for more.
 
 ## property
 The *property* rule disallows certain assignment expressions, e.g., to `innerHTML`.
 
-See [docs/property.md](docs/property.md) for more.
+See [docs/rules/property.md](docs/rules/property.md) for more.
 
 
 ## Examples
