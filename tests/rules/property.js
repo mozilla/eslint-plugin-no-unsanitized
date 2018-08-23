@@ -123,7 +123,20 @@ eslintTester.run("property", rule, {
         // Native method (Check customize code doesn't include these)
         {
             code: "document.toString = evil;"
-        },
+        }, {
+
+            code: `/* Foo.js */
+import React, { Component } from 'react';
+
+class Foo extends Component {
+    render() {
+        return <div dangerouslySetInnerHTML={<span>{'Bar'}</span>} />;
+    }
+}
+
+export default Foo;`,
+            parserOptions: { ecmaVersion: 7, sourceType: "module", ecmaFeatures: {"jsx":true} }
+        }
     ],
 
     // Examples of code that should trigger the rule
