@@ -308,6 +308,18 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ]
-        }
+        },
+
+        // Issue NN: Disallow import() with non-literal params
+        {
+            code: "import(foo)",
+            parser: "babel-eslint",
+            errors: [
+                {
+                    message: "Unsafe call to import for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
     ]
 });
