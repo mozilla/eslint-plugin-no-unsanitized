@@ -119,11 +119,34 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-
         // Native method (Check customize code doesn't include these)
         {
             code: "document.toString = evil;"
         },
+        { // issue 108: adding tests for custom escaper
+            code: "w.innerHTML = templateEscaper`<em>${evil}</em>`;",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "w.innerHTML = DOMPurify.sanitize('<em>${evil}</em>');",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+
+
     ],
 
     // Examples of code that should trigger the rule

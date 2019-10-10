@@ -153,6 +153,50 @@ eslintTester.run("method", rule, {
             code: "import('lodash')",
             parser: "babel-eslint"
         },
+        { // issue 108: adding tests for custom escaper
+            code: "range.createContextualFragment(templateEscaper`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil, options));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil, {ALLOWED_TAGS: ['b']}));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -317,6 +361,42 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            // in this case we allow a function for templates, but it's used as a method
+            code: "n.insertAdjacentHTML('afterend', templateEscaper(evil, options));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to n.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            // in this case we allow a function for methods, but it's used fo template strings
+            code: "n.insertAdjacentHTML('afterend', sanitize`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["sanitize"]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to n.insertAdjacentHTML for argument 1",
                     type: "CallExpression"
                 }
             ]
