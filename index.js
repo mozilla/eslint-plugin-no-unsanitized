@@ -6,6 +6,7 @@ module.exports = {
     },
     configs: {
         DOM: {
+            plugins: ["no-unsanitized"],
             rules: {
                 "no-unsanitized/property": [
                     "error",

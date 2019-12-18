@@ -53,12 +53,10 @@ $ npm install --save-dev eslint-plugin-no-unsanitized
 
 ## Usage
 
-In your eslint.json file enable this rule with the following:
+In your `.eslintrc.json` file enable this rule with the following:
 
 ```
 {
-
-    "plugins": ["no-unsanitized"],
     "extends": ["plugin:no-unsanitized/DOM"]
 }
 ```
