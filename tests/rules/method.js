@@ -401,5 +401,35 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    defaultDisable: true
+                },
+                {
+
+                    // check first parameter to .writeLn(), as long as the preceeding object matches the regex "document"
+                    writeln: {
+                        objectMatches: [
+                            "document"
+                        ],
+                        properties: [0],
+                        escape: {
+                            methods: [],
+                            taggedTemplates: [],
+                        }
+                    }
+                }
+
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        }
     ]
 });
