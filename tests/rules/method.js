@@ -197,6 +197,10 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // basic support for SequenceExpressions, which always return the last item - fixes #113
+            code: "let a = (0,1,2,34);",
+            parserOptions: { ecmaVersion: 6 },
+        }
     ],
 
     // Examples of code that should trigger the rule
@@ -365,6 +369,16 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // basic support for SequenceExpressions, which always return the last item - fixes #113
+            code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
         { // issue 108: adding tests for custom escaper
             // in this case we allow a function for templates, but it's used as a method
             code: "n.insertAdjacentHTML('afterend', templateEscaper(evil, options));",
@@ -430,6 +444,16 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ]
-        }
+        },
+        { // basic support for SequenceExpressions, which always return the last item - fixes #113
+            code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
     ]
 });
