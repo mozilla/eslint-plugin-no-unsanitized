@@ -1,4 +1,3 @@
-/* global require */
 /**
  * @fileoverview Test for no-unsanitized rule
  * @author Frederik Braun et al.
