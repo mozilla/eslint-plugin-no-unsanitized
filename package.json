@@ -14,7 +14,7 @@
         "mocha": "^5.2.0"
     },
     "peerDependencies": {
-        "eslint": "^6"
+        "eslint": "^5 || ^6"
     },
     "homepage": "https://github.com/mozilla/eslint-plugin-no-unsanitized/",
     "keywords": [
