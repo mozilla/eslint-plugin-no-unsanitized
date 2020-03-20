@@ -1,4 +1,3 @@
-/* global require */
 /**
  * @fileoverview Test for no-unsanitized rule
  * @author Frederik Braun et al.
@@ -11,6 +10,8 @@
 
 const rule = require("../../lib/rules/method");
 const RuleTester = require("eslint").RuleTester;
+
+const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/babel-eslint/`;
 
 //------------------------------------------------------------------------------
 // Tests
@@ -151,7 +152,7 @@ eslintTester.run("method", rule, {
         // Issue 83: Support import() expressions as parsed by babel-eslint
         {
             code: "import('lodash')",
-            parser: "babel-eslint"
+            parser: PATH_TO_BABEL_ESLINT
         },
         { // issue 108: adding tests for custom escaper
             code: "range.createContextualFragment(templateEscaper`<em>${evil}</em>`);",
@@ -361,7 +362,7 @@ eslintTester.run("method", rule, {
         // Issue NN: Disallow import() with non-literal params
         {
             code: "import(foo)",
-            parser: "babel-eslint",
+            parser: PATH_TO_BABEL_ESLINT,
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
