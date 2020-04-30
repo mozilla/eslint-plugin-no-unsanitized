@@ -201,6 +201,11 @@ eslintTester.run("method", rule, {
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
+        },
+        { // issue #122 calling an await expression
+            code: "(async function()  { (await somePromise)(); })",
+            parserOptions: { ecmaVersion: 8 }
+
         }
     ],
 
