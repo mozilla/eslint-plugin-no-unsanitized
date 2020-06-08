@@ -201,7 +201,16 @@ eslintTester.run("method", rule, {
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
-        }
+        },
+        { // issue #122 calling an await expression
+            code: "(async function()  { (await somePromise)(); })",
+            parserOptions: { ecmaVersion: 8 }
+        },
+        { // issue #122 calling an await expression
+            // note how we won't be able to tell if the promise resolves to foo.insertAdjacentHTML
+            code: "async () => (await TheRuleDoesntKnowWhatIsBeingReturnedHere())('afterend', blah);",
+            parserOptions: { ecmaVersion: 2020 }
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -456,5 +465,35 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // admittedly, this doesnt make a lot of sense, since the func doesnt return a promise
+            code: "async () => await foo.insertAdjacentHTML('afterend', blah);",
+            parserOptions: { ecmaVersion: 2020 },
+            errors: [
+                {
+                    message: "Unsafe call to foo.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { // admittedly, this doesnt make a lot of sense, since the func doesnt return a promise
+            code: "async () => (await foo.insertAdjacentHTML('afterend', blah))();",
+            parserOptions: { ecmaVersion: 2020 },
+            errors: [
+                {
+                    message: "Unsafe call to foo.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "async () => (await foo)().insertAdjacentHTML('afterend', blah);",
+            parserOptions: { ecmaVersion: 2020 },
+            errors: [
+                {
+                    message: "Unsafe call to (await foo)().insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        }
     ]
 });
