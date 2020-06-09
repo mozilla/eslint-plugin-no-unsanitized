@@ -211,6 +211,14 @@ eslintTester.run("method", rule, {
             code: "async () => (await TheRuleDoesntKnowWhatIsBeingReturnedHere())('afterend', blah);",
             parserOptions: { ecmaVersion: 2020 }
         },
+        { // Regression test for #124, make sure we don't raise an "Unexpected Callee" error.
+            code: "(e = this.n[n.i])(i, r)",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        { // Regression test for #124, make sure we go deeper into validating the AssignmentExpression.
+            code: "(e = node.insertAdjacentHTML('beforebegin', '<s>safe</s>'))()",
+            parserOptions: { ecmaVersion: 6 },
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -494,6 +502,26 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ]
-        }
+        },
+        { // AssignmentExpression, ensure we are detecting the pattern from the right part - Regression test for #124
+            code: "(e = node.insertAdjacentHTML)('beforebegin', evil)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { // Regression test for #124, make sure we go deeper and detect the unsafe pattern
+            code: "(e = node.insertAdjacentHTML('beforebegin', evil))()",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
     ]
 });
