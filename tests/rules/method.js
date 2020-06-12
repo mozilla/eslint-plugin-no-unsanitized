@@ -523,5 +523,14 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "(9)()",
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20Literal%20for%20CallExpression",
+                    type: "Literal"
+                }
+            ]
+        }
     ]
 });
