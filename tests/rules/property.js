@@ -11,6 +11,8 @@
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
 
+const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
+
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -145,7 +147,47 @@ eslintTester.run("property", rule, {
             ]
         },
 
-
+        // Typescript support valid cases
+        // raw strings can be assigned to innerHTML
+        {
+            code: "(options as HTMLElement).innerHTML = '<s>safe</s>';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "(<HTMLElement>items[i](args)).innerHTML = 'rawstring';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "lol.innerHTML = (5 as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+        {
+            code: "node!.innerHTML = DOMPurify.sanitize(evil);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -307,7 +349,6 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-
         // the previous override for manual review and legacy code is now invalid
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
@@ -330,5 +371,48 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
+        // Typescript support cases
+        {
+            code: "x!().innerHTML = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(x as HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "lol.innerHTML = (foo as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
     ]
 });
