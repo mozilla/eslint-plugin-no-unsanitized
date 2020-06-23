@@ -227,7 +227,8 @@ eslintTester.run("method", rule, {
          * The strings are optimized for SEO and understandability.
          * The developer can search for them and will find this MDN article:
          *  https://developer.mozilla.org/en-US/Firefox_OS/Security/Security_Automation
-         */
+         */ 
+
 
         // insertAdjacentHTML examples
         {
@@ -532,5 +533,22 @@ eslintTester.run("method", rule, {
                 }
             ]
         }
+        // Typescript test cases
+        //
+        // Null coalescing operator
+        {
+            code: "node!().insertAdjacentHTML('beforebegin', htmlString);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: 'module',
+            },
+            errors: [
+                {
+                    message: "Unsafe call to node!().insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
     ]
 });
