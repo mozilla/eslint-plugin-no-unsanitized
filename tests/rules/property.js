@@ -11,6 +11,7 @@
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
 
+const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/babel-eslint/`;
 const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
 
 //------------------------------------------------------------------------------
@@ -413,6 +414,38 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ]
+        },
+
+        // ES2020 support cases
+        {
+            code: "yoink.innerHTML &&= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "yoink.innerHTML ||= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "yoink.innerHTML ??= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
         },
     ]
 });
