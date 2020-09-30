@@ -411,7 +411,7 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
-                    type: "CallExpression"
+                    type: "ImportExpression"
                 }
             ]
         },
