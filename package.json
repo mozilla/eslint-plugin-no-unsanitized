@@ -40,5 +40,6 @@
     "scripts": {
         "test": "nyc mocha tests/rules/",
         "lint": "eslint ."
-    }
+    },
+    "files": ["LICENSE", "README.md", "SCHEMA.md", "SECURITY.md", "docs", "index.js", "lib"]
 }
