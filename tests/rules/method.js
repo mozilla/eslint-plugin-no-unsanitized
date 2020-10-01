@@ -150,10 +150,26 @@ eslintTester.run("method", rule, {
             ]
         },
 
+        // Issue 135: Check literal imports in all parsers:
+        {
+            code: "import('lodash')",
+            parserOptions: { ecmaVersion: 2020 },
+        },
+
         // Issue 83: Support import() expressions as parsed by babel-eslint
         {
             code: "import('lodash')",
             parser: PATH_TO_BABEL_ESLINT
+        },
+
+        // Issue 135: Check literal imports in all parsers:
+        {
+            code: "import('lodash')",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
         },
         { // issue 108: adding tests for custom escaper
             code: "range.createContextualFragment(templateEscaper`<em>${evil}</em>`);",
@@ -243,6 +259,24 @@ eslintTester.run("method", rule, {
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
                 ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+
+        // Issue 135: method calls to import should not warn.
+        {
+            code: "foo.import(bar)",
+            parserOptions: { ecmaVersion: 2020 },
+        },
+        {
+            code: "foo.import(bar)",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "foo.import(bar)",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
                 sourceType: "module",
             }
         },
@@ -404,10 +438,34 @@ eslintTester.run("method", rule, {
             ]
         },
 
-        // Issue NN: Disallow import() with non-literal params
+        // Issue 135: Disallow import() with non-literal params
+        {
+            code: "import(foo)",
+            parserOptions: { ecmaVersion: 2020 },
+            errors: [
+                {
+                    message: "Unsafe call to import for argument 0",
+                    type: "ImportExpression"
+                }
+            ]
+        },
         {
             code: "import(foo)",
             parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe call to import for argument 0",
+                    type: "ImportExpression"
+                }
+            ]
+        },
+        {
+            code: "import(foo)",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
