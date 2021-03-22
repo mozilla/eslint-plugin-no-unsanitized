@@ -416,6 +416,28 @@ eslintTester.run("property", rule, {
             ]
         },
 
+        // Flow support cases
+        {
+            code: "(x: HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "lol.innerHTML = (foo: string);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+
         // ES2020 support cases
         {
             code: "yoink.innerHTML &&= bar;",
