@@ -215,6 +215,10 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+            code: "describe.each`table`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
