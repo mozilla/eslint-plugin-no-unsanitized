@@ -268,18 +268,10 @@ eslintTester.run("method", rule, {
         {
             code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', 'raw string');",
             parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            }
         },
         {
             code: "node.insertAdjacentHTML('beforebegin', (5: string));",
             parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
         },
 
 
