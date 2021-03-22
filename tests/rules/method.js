@@ -262,6 +262,26 @@ eslintTester.run("method", rule, {
                 sourceType: "module",
             }
         },
+        
+
+        // Flow support tests
+        {
+            code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', 'raw string');",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "node.insertAdjacentHTML('beforebegin', (5: string));",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+
 
         // Issue 135: method calls to import should not warn.
         {
