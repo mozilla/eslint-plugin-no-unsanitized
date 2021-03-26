@@ -215,7 +215,7 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
-        { // Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
             code: "describe.each`table`(name, fn, timeout)",
             parserOptions: { ecmaVersion: 6 },
         },
@@ -546,6 +546,28 @@ eslintTester.run("method", rule, {
                 }
 
             ],
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { 
+            code: "describe.each`table${node.insertAdjacentHTML('beforebegin', htmlString)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "describe.each`table${document.writeln(evil)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
