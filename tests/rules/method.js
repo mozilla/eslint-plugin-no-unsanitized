@@ -273,6 +273,10 @@ eslintTester.run("method", rule, {
             code: "node.insertAdjacentHTML('beforebegin', (5: string));",
             parser: PATH_TO_BABEL_ESLINT,
         },
+        {
+            code: "(insertAdjacentHTML: function)('afterend', 'static string');",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
 
 
         // Issue 135: method calls to import should not warn.
