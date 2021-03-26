@@ -189,6 +189,25 @@ eslintTester.run("property", rule, {
                 }
             ]
         },
+
+        // Flow support cases
+        {
+            code: "(x: HTMLElement).innerHTML = 'static string'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(items[i](args): HTMLElement).innerHTML = 'rawstring';",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+
     ],
 
     // Examples of code that should trigger the rule
@@ -428,7 +447,17 @@ eslintTester.run("property", rule, {
             ]
         },
         {
-            code: "lol.innerHTML = (foo: string);",
+            code: "node.innerHTML = (foo: string);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(items[i](args): HTMLElement).innerHTML = unsafe;",
             parser: PATH_TO_BABEL_ESLINT,
             errors: [
                 {
