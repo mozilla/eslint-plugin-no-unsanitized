@@ -703,5 +703,15 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "(insertAdjacentHTML: function)('beforebegin', unsafe);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe call to insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
     ]
 });
