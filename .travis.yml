@@ -1,9 +1,0 @@
-language: node_js
-node_js:
-  - "node"
-branches:
-  only:
-    - master
-    - /^greenkeeper-.*$/
-before_script:
-  - npm run lint
