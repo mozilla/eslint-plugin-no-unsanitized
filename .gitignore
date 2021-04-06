@@ -1,3 +1,5 @@
 node_modules
 .idea
 *.swp
+.nyc_output
+.vscode
