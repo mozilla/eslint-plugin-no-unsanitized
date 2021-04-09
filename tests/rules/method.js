@@ -219,6 +219,14 @@ eslintTester.run("method", rule, {
             code: "describe.each`table`(name, fn, timeout)",
             parserOptions: { ecmaVersion: 6 },
         },
+        {
+            code: "document.write`text`",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "document.write`text ${'static string'}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
@@ -588,6 +596,16 @@ eslintTester.run("method", rule, {
                 {
                     message: "Unsafe call to document.writeln for argument 0",
                     type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "document.write`text ${evil}`",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to document.write for argument 0",
+                    type: "TaggedTemplateExpression"
                 }
             ]
         },
