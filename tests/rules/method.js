@@ -227,6 +227,30 @@ eslintTester.run("method", rule, {
             code: "document.write`text ${'static string'}`",
             parserOptions: { ecmaVersion: 6 },
         },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [0]
+                    }
+                }
+            ]
+        },
+        {
+            code: "custom`text ${'string'}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ]
+        },
         { // This is allowed because of how tagged templates pass function parameters
             code: "document.write`text ${variable}`",
             parserOptions: { ecmaVersion: 6 },
@@ -609,6 +633,42 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable} ${variable2}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [2]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 2",
                     type: "TaggedTemplateExpression"
                 }
             ]
