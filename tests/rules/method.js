@@ -227,6 +227,10 @@ eslintTester.run("method", rule, {
             code: "document.write`text ${'static string'}`",
             parserOptions: { ecmaVersion: 6 },
         },
+        { // This is allowed because of how tagged templates pass function parameters
+            code: "document.write`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
@@ -600,11 +604,11 @@ eslintTester.run("method", rule, {
             ]
         },
         { 
-            code: "document.write`text ${evil}`",
+            code: "node.insertAdjacentHTML`text ${variable}`",
             parserOptions: { ecmaVersion: 6 },
             errors: [
                 {
-                    message: "Unsafe call to document.write for argument 0",
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
                     type: "TaggedTemplateExpression"
                 }
             ]
