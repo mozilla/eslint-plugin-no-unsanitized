@@ -391,6 +391,24 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
+        // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { 
+            code: "describe.each`table${m.innerHTML = htmlString}`(name, fn, timeout)",   
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                { message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression" }
+            ]
+        },
+        { 
+            code: "describe.each`table${t.innerHTML = `<span>${name}</span>`}`(name, fn, timeout)",   
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                { message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression" }
+            ]
+        },
+
         // Typescript support cases
         {
             code: "x!().innerHTML = htmlString",

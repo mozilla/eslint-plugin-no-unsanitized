@@ -215,6 +215,46 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+            code: "describe.each`table`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "document.write`text`",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "document.write`text ${'static string'}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [0]
+                    }
+                }
+            ]
+        },
+        {
+            code: "custom`text ${'string'}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ]
+        },
+        { // This is allowed because of how tagged templates pass function parameters
+            code: "document.write`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
@@ -562,6 +602,74 @@ eslintTester.run("method", rule, {
                 {
                     message: "Unsafe call to document.writeln for argument 0",
                     type: "CallExpression"
+                }
+            ]
+        },
+
+        // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { 
+            code: "describe.each`table${node.insertAdjacentHTML('beforebegin', htmlString)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "describe.each`table${document.writeln(evil)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "node.insertAdjacentHTML`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable} ${variable2}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [2]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 2",
+                    type: "TaggedTemplateExpression"
                 }
             ]
         },
