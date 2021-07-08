@@ -821,5 +821,15 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "§fantasyCallee§()",
+            parser: require.resolve("../parsers/fantasy-callee"),
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20FantasyCallee%20for%20CallExpression",
+                    type: "FantasyCallee"
+                }
+            ]
+        }
     ]
 });
