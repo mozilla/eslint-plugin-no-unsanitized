@@ -516,5 +516,15 @@ eslintTester.run("property", rule, {
             ],
             parser: PATH_TO_BABEL_ESLINT,
         },
+        {
+            code: "a.innerHTML §= b;",
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Assignment. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Operator%20%25C2%25A7%253D%20for%20AssignmentExpression",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: require.resolve("../parsers/fantasy-operator"),
+        },
     ]
 });
