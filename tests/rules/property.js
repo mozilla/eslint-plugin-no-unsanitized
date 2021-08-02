@@ -11,6 +11,9 @@
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
 
+const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/babel-eslint/`;
+const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
+
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -145,6 +148,65 @@ eslintTester.run("property", rule, {
             ]
         },
 
+        // Typescript support valid cases
+        // raw strings can be assigned to innerHTML
+        {
+            code: "(options as HTMLElement).innerHTML = '<s>safe</s>';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "(<HTMLElement>items[i](args)).innerHTML = 'rawstring';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "lol.innerHTML = (5 as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+        {
+            code: "node!.innerHTML = DOMPurify.sanitize(evil);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+
+        // Flow support cases
+        {
+            code: "(x: HTMLElement).innerHTML = 'static string'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(items[i](args): HTMLElement).innerHTML = 'rawstring';",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -306,7 +368,6 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
 
-
         // the previous override for manual review and legacy code is now invalid
         {
             code: "g.innerHTML = potentiallyUnsafe; // a=legacy, bug 1155131",
@@ -336,7 +397,142 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ]
-        }
+        },
 
+        // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { 
+            code: "describe.each`table${m.innerHTML = htmlString}`(name, fn, timeout)",   
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                { message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression" }
+            ]
+        },
+        { 
+            code: "describe.each`table${t.innerHTML = `<span>${name}</span>`}`(name, fn, timeout)",   
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                { message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression" }
+            ]
+        },
+
+        // Typescript support cases
+        {
+            code: "x!().innerHTML = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(x as HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "lol.innerHTML = (foo as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+
+        // Flow support cases
+        {
+            code: "(x: HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "node.innerHTML = (foo: string);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(items[i](args): HTMLElement).innerHTML = unsafe;",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+
+        // ES2020 support cases
+        {
+            code: "yoink.innerHTML &&= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "yoink.innerHTML ||= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "yoink.innerHTML ??= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "a.innerHTML §= b;",
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Assignment. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Operator%20%25C2%25A7%253D%20for%20AssignmentExpression",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: require.resolve("../parsers/fantasy-operator"),
+        },
     ]
 });

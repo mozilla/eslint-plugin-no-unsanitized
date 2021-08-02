@@ -12,6 +12,7 @@ const rule = require("../../lib/rules/method");
 const RuleTester = require("eslint").RuleTester;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/babel-eslint/`;
+const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
 
 //------------------------------------------------------------------------------
 // Tests
@@ -149,10 +150,26 @@ eslintTester.run("method", rule, {
             ]
         },
 
+        // Issue 135: Check literal imports in all parsers:
+        {
+            code: "import('lodash')",
+            parserOptions: { ecmaVersion: 2020 },
+        },
+
         // Issue 83: Support import() expressions as parsed by babel-eslint
         {
             code: "import('lodash')",
             parser: PATH_TO_BABEL_ESLINT
+        },
+
+        // Issue 135: Check literal imports in all parsers:
+        {
+            code: "import('lodash')",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
         },
         { // issue 108: adding tests for custom escaper
             code: "range.createContextualFragment(templateEscaper`<em>${evil}</em>`);",
@@ -198,6 +215,46 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        { // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+            code: "describe.each`table`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "document.write`text`",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "document.write`text ${'static string'}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [0]
+                    }
+                }
+            ]
+        },
+        {
+            code: "custom`text ${'string'}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ]
+        },
+        { // This is allowed because of how tagged templates pass function parameters
+            code: "document.write`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
             parserOptions: { ecmaVersion: 6 },
@@ -219,6 +276,66 @@ eslintTester.run("method", rule, {
             code: "(e = node.insertAdjacentHTML('beforebegin', '<s>safe</s>'))()",
             parserOptions: { ecmaVersion: 6 },
         },
+
+        // Typescript support tests
+        {
+            code: "node.insertAdjacentHTML('beforebegin', (5 as string));",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+        {
+            code: "node!.insertAdjacentHTML('beforebegin', 'raw string');",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "node!().insertAdjacentHTML('beforebegin', 'raw string');",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        
+
+        // Flow support tests
+        {
+            code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', 'raw string');",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "node.insertAdjacentHTML('beforebegin', (5: string));",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "(insertAdjacentHTML: function)('afterend', 'static string');",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+
+
+        // Issue 135: method calls to import should not warn.
+        {
+            code: "foo.import(bar)",
+            parserOptions: { ecmaVersion: 2020 },
+        },
+        {
+            code: "foo.import(bar)",
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "foo.import(bar)",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            }
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -227,7 +344,8 @@ eslintTester.run("method", rule, {
          * The strings are optimized for SEO and understandability.
          * The developer can search for them and will find this MDN article:
          *  https://developer.mozilla.org/en-US/Firefox_OS/Security/Security_Automation
-         */
+         */ 
+
 
         // insertAdjacentHTML examples
         {
@@ -376,14 +494,38 @@ eslintTester.run("method", rule, {
             ]
         },
 
-        // Issue NN: Disallow import() with non-literal params
+        // Issue 135: Disallow import() with non-literal params
+        {
+            code: "import(foo)",
+            parserOptions: { ecmaVersion: 2020 },
+            errors: [
+                {
+                    message: "Unsafe call to import for argument 0",
+                    type: "ImportExpression"
+                }
+            ]
+        },
         {
             code: "import(foo)",
             parser: PATH_TO_BABEL_ESLINT,
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
-                    type: "CallExpression"
+                    type: "ImportExpression"
+                }
+            ]
+        },
+        {
+            code: "import(foo)",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2021,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe call to import for argument 0",
+                    type: "ImportExpression"
                 }
             ]
         },
@@ -463,6 +605,74 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+
+        // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
+        { 
+            code: "describe.each`table${node.insertAdjacentHTML('beforebegin', htmlString)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "describe.each`table${document.writeln(evil)}`(name, fn, timeout)",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        { 
+            code: "node.insertAdjacentHTML`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [1]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 1",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
+        {
+            code: "custom`text ${variable} ${variable2}`",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {},
+                {
+                    "custom": {
+                        "properties": [2]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to custom for argument 2",
+                    type: "TaggedTemplateExpression"
+                }
+            ]
+        },
         { // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
             parserOptions: { ecmaVersion: 6 },
@@ -529,6 +739,95 @@ eslintTester.run("method", rule, {
                 {
                     message: "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20Literal%20for%20CallExpression",
                     type: "Literal"
+                }
+            ]
+        },
+
+        // Typescript test cases
+        //
+        // Null coalescing operator
+        {
+            code: "node!().insertAdjacentHTML('beforebegin', htmlString);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe call to node!().insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "node!.insertAdjacentHTML('beforebegin', htmlString);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe call to node!.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "(x as HTMLElement).insertAdjacentHTML('beforebegin', htmlString)",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe call to x as HTMLElement.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        // Flow test cases
+
+        {
+            code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', unsafe);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe call to node: HTMLElement.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "node.insertAdjacentHTML('beforebegin', (unsafe: string));",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "(insertAdjacentHTML: function)('beforebegin', unsafe);",
+            parser: PATH_TO_BABEL_ESLINT,
+            errors: [
+                {
+                    message: "Unsafe call to insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "§fantasyCallee§()",
+            parser: require.resolve("../parsers/fantasy-callee"),
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20FantasyCallee%20for%20CallExpression",
+                    type: "FantasyCallee"
                 }
             ]
         }
