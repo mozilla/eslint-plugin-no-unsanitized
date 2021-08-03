@@ -209,7 +209,7 @@ eslintTester.run("property", rule, {
 
         // support for variables that are declared elsewhere
         {
-            code: "var literalFromElsewhere = '<b>safe</b>'; y.innerHTML = literalFromElsewhere;",
+            code: "let literalFromElsewhere = '<b>safe</b>'; y.innerHTML = literalFromElsewhere;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -217,19 +217,19 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var multiStepVarSearch = '<b>safe</b>'+'yo'; const copy = multiStepVarSearch; y.innerHTML = copy;",
+            code: "let multiStepVarSearch = '<b>safe</b>'+'yo'; const copy = multiStepVarSearch; y.innerHTML = copy;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var copies = '<b>safe</b>'; var copies = 'stillOK'; y.innerHTML = copies;",
+            code: "let copies = '<b>safe</b>'; copies = 'stillOK'; y.innerHTML = copies;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var copies = '<b>safe</b>'; if (monday) { copies = 'stillOK'; }; y.innerHTML = copies;",
+            code: "let copies = '<b>safe</b>'; if (monday) { copies = 'stillOK'; }; y.innerHTML = copies;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var msg = '<b>safe</b>'; var altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
+            code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
             parserOptions: { ecmaVersion: 6 }
         },
     ],
@@ -551,7 +551,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var copies = '<b>safe</b>'; copies = suddenlyUnsafe; y.innerHTML = copies;",
+            code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; y.innerHTML = copies;",
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
@@ -561,17 +561,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "var copies = '<b>safe</b>'; var copies = suddenlyUnsafe; y.innerHTML = copies;",
-            errors: [
-                {
-                    message: /Unsafe assignment to innerHTML \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
-                    type: "AssignmentExpression"
-                }
-            ],
-            parserOptions: { ecmaVersion: 6 }
-        },
-        {
-            code: "var copies = '<b>safe</b>'; if (monday) { copies = badness }; y.innerHTML = copies;",
+            code: "let copies = '<b>safe</b>'; if (monday) { copies = badness }; y.innerHTML = copies;",
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
@@ -581,7 +571,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: `var copies = "<b>safe</b>";
+            code: `let copies = "<b>safe</b>";
               (() => {
                   copies = badness;
               })();
@@ -596,9 +586,9 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: `var obj = { prop: "<b>safe</b>" };
+            code: `let obj = { prop: "<b>safe</b>" };
               doSomething(obj);
-              var copies = obj.prop;
+              let copies = obj.prop;
               y.innerHTML = copies;
             `,
             errors: [
