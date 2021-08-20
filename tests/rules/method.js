@@ -822,6 +822,19 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+
+            // This test ensures we do not allow _var_ declarations traced back as "safe"
+            // because it could be modified through dynamical global scope operations,
+            // e.g., globalThis['copies'] and we don't want to trace through those.
+            code: "var copies = '<b>safe</b>'; /* some modifications with globalThis['copies'] */;  n.insertAdjacentHTML('beforebegin', copies);",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
+        {
             code: "let copies = evil; n.insertAdjacentHTML('beforebegin', copies);",
             errors: [
                 {
@@ -850,6 +863,6 @@ eslintTester.run("method", rule, {
                     type: "FantasyCallee"
                 }
             ]
-        }        
+        }
     ]
 });
