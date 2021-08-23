@@ -516,6 +516,20 @@ eslintTester.run("property", rule, {
             ],
             parser: PATH_TO_BABEL_ESLINT,
         },
+
+        // Ensure normalizeMethodCall expects a CallExpression with a CallExpression callee.
+        {
+            code: "a.innerHTML = somefn()()",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Explicitly cover behavior on new unexpected operators.
         {
             code: "a.innerHTML §= b;",
             errors: [
