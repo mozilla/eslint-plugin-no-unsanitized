@@ -854,6 +854,42 @@ eslintTester.run("method", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
+
+        // Variable tracked back to a parameter part of a FunctionDeclaration.
+        {
+            code: "function test(evil) { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionDeclaration' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Variable tracked back to a parameter part of a FunctionExpression.
+        {
+            code: "const fn = function (evil) { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionExpression' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Variable tracked back to a parameter part of a ArrowFunctionExpression.
+        {
+            code: "const fn = (evil) => { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'ArrowFunctionExpression' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
         {
             code: "§fantasyCallee§()",
             parser: require.resolve("../parsers/fantasy-callee"),
