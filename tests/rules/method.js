@@ -822,6 +822,75 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+
+            // This test ensures we do not allow _var_ declarations traced back as "safe"
+            // because it could be modified through dynamical global scope operations,
+            // e.g., globalThis['copies'] and we don't want to trace through those.
+            code: "var copies = '<b>safe</b>'; /* some modifications with globalThis['copies'] */;  n.insertAdjacentHTML('beforebegin', copies);",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
+        {
+            code: "let copies = evil; n.insertAdjacentHTML('beforebegin', copies);",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; n.insertAdjacentHTML('beforebegin', copies);",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Variable tracked back to a parameter part of a FunctionDeclaration.
+        {
+            code: "function test(evil) { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionDeclaration' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Variable tracked back to a parameter part of a FunctionExpression.
+        {
+            code: "const fn = function (evil) { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionExpression' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Variable tracked back to a parameter part of a ArrowFunctionExpression.
+        {
+            code: "const fn = (evil) => { let copies = '<b>safe</b>'; copies = evil; n.insertAdjacentHTML('beforebegin', copies); }",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'ArrowFunctionExpression' at \d+:\d+\)/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "§fantasyCallee§()",
             parser: require.resolve("../parsers/fantasy-callee"),
             errors: [
