@@ -833,6 +833,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: 1
+                }
+            ]
         },
         {
             code: "let copies = evil; n.insertAdjacentHTML('beforebegin', copies);",
@@ -840,6 +845,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: 1
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -850,6 +860,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: 1
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -864,6 +879,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: 1
+                }
+            ],
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -874,6 +894,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionExpression' at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: 1
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -888,7 +913,28 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: 1
+                }
+            ],
             parserOptions: { ecmaVersion: 6 }
+        },
+
+        // Testing invalid config values
+        {
+            code: "does.not.matter();",
+            errors: [
+                {
+                    message: /Configuration Error! Setting 'variableTracing' has unexpected value 666/,
+                    type: null
+                }
+            ],
+            options: [
+                {
+                    variableTracing: 666
+                }
+            ],
         },
         {
             code: "§fantasyCallee§()",
