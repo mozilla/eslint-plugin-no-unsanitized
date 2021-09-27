@@ -213,7 +213,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -222,7 +222,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -231,7 +231,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -240,7 +240,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -249,7 +249,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -258,7 +258,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
         },
@@ -606,7 +606,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -621,7 +621,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -636,7 +636,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -656,7 +656,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -675,7 +675,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }

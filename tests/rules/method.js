@@ -835,7 +835,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ]
         },
@@ -849,7 +849,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -864,7 +864,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -881,7 +881,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -898,7 +898,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -915,7 +915,7 @@ eslintTester.run("method", rule, {
             ],
             options: [
                 {
-                    variableTracing: 1
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
