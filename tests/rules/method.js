@@ -920,22 +920,6 @@ eslintTester.run("method", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
-
-        // Testing invalid config values
-        {
-            code: "does.not.matter();",
-            errors: [
-                {
-                    message: /Configuration Error! Setting 'variableTracing' has unexpected value 666/,
-                    type: null
-                }
-            ],
-            options: [
-                {
-                    variableTracing: 666
-                }
-            ],
-        },
         {
             code: "§fantasyCallee§()",
             parser: require.resolve("../parsers/fantasy-callee"),
