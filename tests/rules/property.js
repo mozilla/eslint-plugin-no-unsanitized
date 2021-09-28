@@ -691,7 +691,7 @@ eslintTester.run("property", rule, {
             ],
             options: [
                 {
-                    variableTracing: 0
+                    variableTracing: false
                 }
             ],
         },

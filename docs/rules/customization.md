@@ -1,6 +1,7 @@
 # Customization
 
 ## Variable Tracing
+
 The plugin allows a limit back-tracing of variables.
 This will be used to check code like here:
 ```js
@@ -17,9 +18,7 @@ option `variableTracing` to `false`.**
 
 Both values are supported and tested in CI.
 
-
 ## Customization Examples
-
 You can customize the way this rule works in various ways.
 * Add to the list of properties or functions to be checked for potentially
 dangers variable input
