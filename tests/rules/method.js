@@ -833,6 +833,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: true
+                }
+            ]
         },
         {
             code: "let copies = evil; n.insertAdjacentHTML('beforebegin', copies);",
@@ -840,6 +845,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -850,6 +860,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -864,6 +879,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: true
+                }
+            ],
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -876,6 +896,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression"
                 }
             ],
+            options: [
+                {
+                    variableTracing: true
+                }
+            ],
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -886,6 +911,11 @@ eslintTester.run("method", rule, {
                 {
                     message: /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'ArrowFunctionExpression' at \d+:\d+\)/,
                     type: "CallExpression"
+                }
+            ],
+            options: [
+                {
+                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
