@@ -11,8 +11,15 @@
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
 
-const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/babel-eslint/`;
+const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
 const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
+
+const PARSER_OPTIONS_FOR_FLOW = {
+    requireConfigFile: false,
+    babelOptions: {
+        plugins: ["@babel/plugin-syntax-flow"]
+    }
+};
 
 //------------------------------------------------------------------------------
 // Tests
@@ -193,18 +200,22 @@ eslintTester.run("property", rule, {
         {
             code: "(x: HTMLElement).innerHTML = 'static string'",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(items[i](args): HTMLElement).innerHTML = 'rawstring';",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
 
         // support for variables that are declared elsewhere
@@ -446,16 +457,16 @@ eslintTester.run("property", rule, {
         },
 
         // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
-        { 
-            code: "describe.each`table${m.innerHTML = htmlString}`(name, fn, timeout)",   
+        {
+            code: "describe.each`table${m.innerHTML = htmlString}`(name, fn, timeout)",
             parserOptions: { ecmaVersion: 6 },
             errors: [
                 { message: "Unsafe assignment to innerHTML",
                     type: "AssignmentExpression" }
             ]
         },
-        { 
-            code: "describe.each`table${t.innerHTML = `<span>${name}</span>`}`(name, fn, timeout)",   
+        {
+            code: "describe.each`table${t.innerHTML = `<span>${name}</span>`}`(name, fn, timeout)",
             parserOptions: { ecmaVersion: 6 },
             errors: [
                 { message: "Unsafe assignment to innerHTML",
@@ -511,6 +522,7 @@ eslintTester.run("property", rule, {
         {
             code: "(x: HTMLElement).innerHTML = htmlString",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -521,6 +533,7 @@ eslintTester.run("property", rule, {
         {
             code: "node.innerHTML = (foo: string);",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -531,6 +544,7 @@ eslintTester.run("property", rule, {
         {
             code: "(items[i](args): HTMLElement).innerHTML = unsafe;",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
