@@ -14,6 +14,13 @@ const RuleTester = require("eslint").RuleTester;
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
 const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
 
+const PARSER_OPTIONS_FOR_FLOW = {
+    requireConfigFile: false,
+    babelOptions: {
+        plugins: ["@babel/plugin-syntax-flow"]
+    }
+};
+
 //------------------------------------------------------------------------------
 // Tests
 //------------------------------------------------------------------------------
@@ -308,14 +315,17 @@ eslintTester.run("method", rule, {
         {
             code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', 'raw string');",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "node.insertAdjacentHTML('beforebegin', (5: string));",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(insertAdjacentHTML: function)('afterend', 'static string');",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
 
 
@@ -794,6 +804,7 @@ eslintTester.run("method", rule, {
         {
             code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', unsafe);",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe call to node: HTMLElement.insertAdjacentHTML for argument 1",
@@ -804,6 +815,7 @@ eslintTester.run("method", rule, {
         {
             code: "node.insertAdjacentHTML('beforebegin', (unsafe: string));",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe call to node.insertAdjacentHTML for argument 1",
@@ -814,6 +826,7 @@ eslintTester.run("method", rule, {
         {
             code: "(insertAdjacentHTML: function)('beforebegin', unsafe);",
             parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe call to insertAdjacentHTML for argument 1",

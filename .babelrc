@@ -1,3 +1,6 @@
 {
-  "plugins": ["@babel/plugin-syntax-flow"]
+  // @babel/eslint-parser, which is used in the test suite, requires a config
+  // file by default, which is why this file exists. Instead of adding
+  // configuration here, we should pass configuration to the parser using
+  // `parserOptions` for each test instead.
 }
