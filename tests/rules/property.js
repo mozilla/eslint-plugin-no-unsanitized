@@ -222,56 +222,26 @@ eslintTester.run("property", rule, {
         {
             code: "let literalFromElsewhere = '<b>safe</b>'; y.innerHTML = literalFromElsewhere;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
         {
             code: "const literalFromElsewhereWithInnerExpr = '<b>safe</b>'+'yo'; y.innerHTML = literalFromElsewhereWithInnerExpr;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
         {
             code: "let multiStepVarSearch = '<b>safe</b>'+'yo'; const copy = multiStepVarSearch; y.innerHTML = copy;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
         {
             code: "let copies = '<b>safe</b>'; copies = 'stillOK'; y.innerHTML = copies;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
         {
             code: "let copies = '<b>safe</b>'; if (monday) { copies = 'stillOK'; }; y.innerHTML = copies;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
         {
             code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
             parserOptions: { ecmaVersion: 6 },
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
         },
     ],
 
@@ -618,11 +588,6 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -633,11 +598,6 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -646,11 +606,6 @@ eslintTester.run("property", rule, {
                 {
                     message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
                     type: "AssignmentExpression"
-                }
-            ],
-            options: [
-                {
-                    variableTracing: true
                 }
             ],
             parserOptions: { ecmaVersion: 6 }
@@ -668,11 +623,6 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -687,25 +637,20 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression"
                 }
             ],
-            options: [
-                {
-                    variableTracing: true
-                }
-            ],
             parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
+            options: [
+                {
+                    variableTracing: false
+                }
+            ],
             parserOptions: { ecmaVersion: 6 },
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,
                     type: "AssignmentExpression"
-                }
-            ],
-            options: [
-                {
-                    variableTracing: false
                 }
             ],
         },
