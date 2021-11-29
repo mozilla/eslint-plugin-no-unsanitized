@@ -346,6 +346,12 @@ eslintTester.run("method", rule, {
                 sourceType: "module",
             }
         },
+
+        // let without initialization.
+        {
+            code: "let c; n.insertAdjacentHTML('beforebegin', c)",
+            parserOptions: { ecmaVersion: 6 }
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -912,6 +918,25 @@ eslintTester.run("method", rule, {
                     type: "FantasyCallee"
                 }
             ]
-        }
+        },
+        {
+            code: `
+              let c;
+              if (cond) {
+                c = '<b>safe</b>';
+              } else {
+                c = evil;
+              }
+              n.insertAdjacentHTML('beforebegin', \`\${c}\`);
+            `,
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
     ]
 });
