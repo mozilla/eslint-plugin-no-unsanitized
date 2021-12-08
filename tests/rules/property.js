@@ -92,6 +92,15 @@ eslintTester.run("property", rule, {
             code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
             parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "let c; c = 123; a.innerHTML = `${c}`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let c; a.innerHTML = `${c}`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+
 
         // (binary) expressions
         {
@@ -663,6 +672,36 @@ eslintTester.run("property", rule, {
                 }
             ],
             parser: require.resolve("../parsers/fantasy-operator"),
+        },
+
+        // Uninitialized variable declaration.
+        {
+            code: `
+              let c;
+              if (cond) {
+                c = '<b>safe</b>';
+              } else {
+                c = evil;
+              }
+              a.innerHTML = \`\${c}\`;
+            `,
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let c; c = 'apparently-safe'; functionCall(c); n.innerHTML = c.property;",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML/,
+                    type: "AssignmentExpression"
+                }
+            ],
         },
     ]
 });
