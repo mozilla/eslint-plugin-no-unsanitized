@@ -271,7 +271,23 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "m['innerHTML'] = htmlString;",
+            errors: [
+                { message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression" }
+            ]
+        },
+        {
             code: "a.innerHTML += htmlString;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "a['innerHTML'] += htmlString;",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -289,7 +305,25 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "a['innerHTML'] += template.toHtml();",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
             code: "m.outerHTML = htmlString;",
+            errors: [
+                {
+                    message: "Unsafe assignment to outerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "m['outerHTML'] = htmlString;",
             errors: [
                 {
                     message: "Unsafe assignment to outerHTML",
@@ -308,7 +342,27 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "t['innerHTML'] = `<span>${name}</span>`;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "t.innerHTML = `<span>${'foobar'}</span>${evil}`;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "t['innerHTML'] = `<span>${'foobar'}</span>${evil}`;",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -329,7 +383,25 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "node['innerHTML'] = '<span>'+ htmlInput;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
             code: "node.innerHTML = '<span>'+ htmlInput + '</span>';",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "node['innerHTML'] = '<span>'+ htmlInput + '</span>';",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -341,6 +413,16 @@ eslintTester.run("property", rule, {
         // bug https://bugzilla.mozilla.org/show_bug.cgi?id=1198200
         {
             code: "title.innerHTML = _('WB_LT_TIPS_S_SEARCH'," +
+            " {value0:engine});",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "title['innerHTML'] = _('WB_LT_TIPS_S_SEARCH'," +
             " {value0:engine});",
             errors: [
                 {
@@ -361,6 +443,15 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "x['innerHTML'] = Sanitizer.escapeHTML(evil)",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
             code: "x.innerHTML = Sanitizer.escapeHTML(`evil`)",
             errors: [
                 {
@@ -371,7 +462,7 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
-            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            code: "x['innerHTML'] = Sanitizer.escapeHTML(`evil`)",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -391,7 +482,47 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "y['innerHTML'] = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y['innerHTML'] = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "y['innerHTML'] = ((arrow_function)=>null)`some HTML`",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -404,6 +535,16 @@ eslintTester.run("property", rule, {
         // testing unwrapSafeHTML spread sanitizer typo
         {
             code: "this.imeList.innerHTML = Sanitizer.unrapSafeHTML(...listHtml);",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "this.imeList['innerHTML'] = Sanitizer.unrapSafeHTML(...listHtml);",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -425,7 +566,27 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "g['innerHTML'] = potentiallyUnsafe; // a=legacy, bug 1155131",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "function foo() { return this().innerHTML = evil; };",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "function foo() { return this()['innerHTML'] = evil; };",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -469,7 +630,35 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "x!()['innerHTML'] = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
             code: "(x as HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(x as HTMLElement)['innerHTML'] = htmlString",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
                 ecmaVersion: 2018,
@@ -496,10 +685,36 @@ eslintTester.run("property", rule, {
                 }
             ]
         },
+        {
+            code: "lol['innerHTML'] = (foo as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+
 
         // Flow support cases
         {
             code: "(x: HTMLElement).innerHTML = htmlString",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(x: HTMLElement)['innerHTML'] = htmlString",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
@@ -521,7 +736,29 @@ eslintTester.run("property", rule, {
             ]
         },
         {
+            code: "node['innerHTML'] = (foo: string);",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
             code: "(items[i](args): HTMLElement).innerHTML = unsafe;",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ]
+        },
+        {
+            code: "(items[i](args): HTMLElement)['innerHTML'] = unsafe;",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
@@ -544,7 +781,27 @@ eslintTester.run("property", rule, {
             parser: PATH_TO_BABEL_ESLINT,
         },
         {
+            code: "yoink['innerHTML'] &&= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
             code: "yoink.innerHTML ||= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
+        {
+            code: "yoink['innerHTML'] ||= bar;",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -563,10 +820,40 @@ eslintTester.run("property", rule, {
             ],
             parser: PATH_TO_BABEL_ESLINT,
         },
+        {
+            code: "yoink['innerHTML'] ??= bar;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: PATH_TO_BABEL_ESLINT,
+        },
 
         // Ensure normalizeMethodCall expects a CallExpression with a CallExpression callee.
         {
+            code: "a['innerHTML'] = somefn()()",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "a.innerHTML = somefn()()",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "a['innerHTML'] = somefn()()",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -579,6 +866,16 @@ eslintTester.run("property", rule, {
         // Ensure normalizeMethodCall expects a CallExpression with a ConditionalExpression callee.
         {
             code: "a.innerHTML = (cond ? maybe_safe : or_evil)()",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "a['innerHTML'] = (cond ? maybe_safe : or_evil)()",
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -600,6 +897,16 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "copy = '<b>safe</b>'; copy = evil; y['innerHTML'] = copy;",
+            errors: [
+                {
+                    message: "Unsafe assignment to innerHTML",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; y.innerHTML = copies;",
             errors: [
                 {
@@ -610,7 +917,27 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; y['innerHTML'] = copies;",
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "let copies = '<b>safe</b>'; if (monday) { copies = badness }; y.innerHTML = copies;",
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let copies = '<b>safe</b>'; if (monday) { copies = badness }; y['innerHTML'] = copies;",
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
@@ -635,10 +962,39 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: `let copies = "<b>safe</b>";
+              (() => {
+                  copies = badness;
+              })();
+              y['innerHTML'] = copies;
+            `,
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: `let obj = { prop: "<b>safe</b>" };
               doSomething(obj);
               let copies = obj.prop;
               y.innerHTML = copies;
+            `,
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: `let obj = { prop: "<b>safe</b>" };
+              doSomething(obj);
+              let copies = obj.prop;
+              y['innerHTML'] = copies;
             `,
             errors: [
                 {
@@ -664,7 +1020,32 @@ eslintTester.run("property", rule, {
             ],
         },
         {
+            code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y['innerHTML'] = msg;",
+            options: [
+                {
+                    variableTracing: false
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML/,
+                    type: "AssignmentExpression"
+                }
+            ],
+        },
+        {
             code: "a.innerHTML §= b;",
+            errors: [
+                {
+                    message: "Error in no-unsanitized: Unexpected Assignment. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Operator%20%25C2%25A7%253D%20for%20AssignmentExpression",
+                    type: "AssignmentExpression"
+                }
+            ],
+            parser: require.resolve("../parsers/fantasy-operator"),
+        },
+        {
+            code: "a['innerHTML'] §= b;",
             errors: [
                 {
                     message: "Error in no-unsanitized: Unexpected Assignment. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Operator%20%25C2%25A7%253D%20for%20AssignmentExpression",
@@ -694,7 +1075,36 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: `
+              let c;
+              if (cond) {
+                c = '<b>safe</b>';
+              } else {
+                c = evil;
+              }
+              a['innerHTML'] = \`\${c}\`;
+            `,
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML/,
+                    type: "AssignmentExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        {
             code: "let c; c = 'apparently-safe'; functionCall(c); n.innerHTML = c.property;",
+            parserOptions: { ecmaVersion: 6 },
+            errors: [
+                {
+                    message: /Unsafe assignment to innerHTML/,
+                    type: "AssignmentExpression"
+                }
+            ],
+        },
+        {
+            code: "let c; c = 'apparently-safe'; functionCall(c); n['innerHTML'] = c.property;",
             parserOptions: { ecmaVersion: 6 },
             errors: [
                 {
