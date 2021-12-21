@@ -374,7 +374,25 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "node['insertAdjacentHTML']('beforebegin', htmlString);",
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "node.insertAdjacentHTML('beforebegin', template.getHTML());",
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "node['insertAdjacentHTML']('beforebegin', template.getHTML());",
             errors: [
                 {
                     message: "Unsafe call to node.insertAdjacentHTML for argument 1",
@@ -394,7 +412,25 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "document['write']('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to document.write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "documentish.write('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to documentish.write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "documentish['write']('<span>'+ htmlInput + '</span>');",
             errors: [
                 {
                     message: "Unsafe call to documentish.write for argument 0",
@@ -412,7 +448,25 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "documentIframe['write']('<span>'+ htmlInput + '</span>');",
+            errors: [
+                {
+                    message: "Unsafe call to documentIframe.write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "document.writeln(evil);",
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "document['writeln'](evil);",
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
@@ -430,9 +484,30 @@ eslintTester.run("method", rule, {
             ]
         },
 
+        {
+            code: "window.document['writeln'](bad);",
+            errors: [
+                {
+                    message: "Unsafe call to window.document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
         // issue 71 https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/71
         {
             code: "function foo() { return this().insertAdjacentHTML(foo, bar); };",
+            errors: [
+                {
+                    message: "Unsafe call to this().insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ],
+            parserOptions: { ecmaVersion: 6 }
+        },
+
+        {
+            code: "function foo() { return this()['insertAdjacentHTML'](foo, bar); };",
             errors: [
                 {
                     message: "Unsafe call to this().insertAdjacentHTML for argument 1",
@@ -463,7 +538,7 @@ eslintTester.run("method", rule, {
 
         // Checking disableDefault can remove the default rules but also add more
         {
-            code: "document.write(evil); b.thing(x); b.other(me);",
+            code: "document.write(evil); b.thing(x); b.other(me); b['onemore'](two)",
             options: [
                 {
                     defaultDisable: true
@@ -472,6 +547,9 @@ eslintTester.run("method", rule, {
                     thing: {
                     },
                     other: {
+                        properties: [0]
+                    },
+                    onemore: {
                         properties: [0]
                     }
                 }
@@ -483,6 +561,10 @@ eslintTester.run("method", rule, {
                 },
                 {
                     message: "Unsafe call to b.other for argument 0",
+                    type: "CallExpression"
+                },
+                {
+                    message: "Unsafe call to b.onemore for argument 0",
                     type: "CallExpression"
                 }
             ]
@@ -499,9 +581,29 @@ eslintTester.run("method", rule, {
             ]
         },
 
+        {
+            code: "getDocument(myID)['write'](evil)",
+            errors: [
+                {
+                    message: "Unsafe call to getDocument(myID).write for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
         // Issue 79: Warn for use of createContextualFragment
         {
             code: "range.createContextualFragment(badness)",
+            errors: [
+                {
+                    message: "Unsafe call to range.createContextualFragment for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+
+        {
+            code: "range['createContextualFragment'](badness)",
             errors: [
                 {
                     message: "Unsafe call to range.createContextualFragment for argument 0",
@@ -573,6 +675,23 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "n['insertAdjacentHTML']('afterend', templateEscaper(evil, options));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to n.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
         { // issue 108: adding tests for custom escaper
             // in this case we allow a function for methods, but it's used fo template strings
             code: "n.insertAdjacentHTML('afterend', sanitize`<em>${evil}</em>`);",
@@ -592,7 +711,54 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "n['insertAdjacentHTML']('afterend', sanitize`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["sanitize"]
+                    }
+                }
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to n.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    defaultDisable: true
+                },
+                {
+
+                    // check first parameter to .writeLn(), as long as the preceeding object matches the regex "document"
+                    writeln: {
+                        objectMatches: [
+                            "document"
+                        ],
+                        properties: [0],
+                        escape: {
+                            methods: [],
+                            taggedTemplates: [],
+                        }
+                    }
+                }
+
+            ],
+            errors: [
+                {
+                    message: "Unsafe call to document.writeln for argument 0",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "document['writeln'](Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
