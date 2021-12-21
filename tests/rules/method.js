@@ -39,11 +39,23 @@ eslintTester.run("method", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "n['insertAdjacentHTML']('afterend', 'meh');",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "n.insertAdjacentHTML('afterend', `<br>`);",
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "n['insertAdjacentHTML']('afterend', `<br>`);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "n['insertAdjacentHTML']('afterend', Sanitizer.escapeHTML`${title}`);",
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -53,7 +65,15 @@ eslintTester.run("method", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "document['write']('lulz');",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "document.write();",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "document['write']();",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -61,7 +81,15 @@ eslintTester.run("method", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "document['writeln'](Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "otherNodeWeDontCheckFor.writeln(evil);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "otherNodeWeDontCheckFor['writeln'](evil);",
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -69,9 +97,22 @@ eslintTester.run("method", rule, {
         {
             code: "document.toString(evil);"
         },
+        {
+            code: "document['toString'](evil);"
+        },
 
         {
             code: "document.write(escaper(x))",
+            options: [
+                {
+                    escape: {
+                        methods: ["escaper"]
+                    }
+                }
+            ]
+        },
+        {
+            code: "document['write'](escaper(x))",
             options: [
                 {
                     escape: {
@@ -95,10 +136,31 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+        {
+            code: "document['write'](evilest)",
+            options: [
+                {
+                    objectMatches: ["document", "documentFun"]
+                },
+                {
+                    write: {
+                        objectMatches: ["thing"]
+                    }
+                }
+            ]
+        },
 
         // Checking disableDefault can remove the default rules
         {
             code: "document.write(evil)",
+            options: [
+                {
+                    defaultDisable: true
+                }
+            ]
+        },
+        {
+            code: "document['write'](evil)",
             options: [
                 {
                     defaultDisable: true
@@ -190,7 +252,29 @@ eslintTester.run("method", rule, {
             ]
         },
         { // issue 108: adding tests for custom escaper
+            code: "range['createContextualFragment'](templateEscaper`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
             code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "n['insertAdjacentHTML']('afterend', DOMPurify.sanitize(evil));",
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
@@ -212,7 +296,29 @@ eslintTester.run("method", rule, {
             ]
         },
         { // issue 108: adding tests for custom escaper
+            code: "n['insertAdjacentHTML']('afterend', DOMPurify.sanitize(evil, options));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
             code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil, {ALLOWED_TAGS: ['b']}));",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "n['insertAdjacentHTML']('afterend', DOMPurify.sanitize(evil, {ALLOWED_TAGS: ['b']}));",
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
@@ -283,10 +389,22 @@ eslintTester.run("method", rule, {
             code: "(e = node.insertAdjacentHTML('beforebegin', '<s>safe</s>'))()",
             parserOptions: { ecmaVersion: 6 },
         },
+        { // Regression test for #124, make sure we go deeper into validating the AssignmentExpression.
+            code: "(e = node['insertAdjacentHTML']('beforebegin', '<s>safe</s>'))()",
+            parserOptions: { ecmaVersion: 6 },
+        },
 
         // Typescript support tests
         {
             code: "node.insertAdjacentHTML('beforebegin', (5 as string));",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+        {
+            code: "node['insertAdjacentHTML']('beforebegin', (5 as string));",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
                 ecmaVersion: 2018,
@@ -302,7 +420,23 @@ eslintTester.run("method", rule, {
             }
         },
         {
+            code: "node!['insertAdjacentHTML']('beforebegin', 'raw string');",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
             code: "node!().insertAdjacentHTML('beforebegin', 'raw string');",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
+            code: "node!()['insertAdjacentHTML']('beforebegin', 'raw string');",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
                 ecmaVersion: 2018,
@@ -318,7 +452,17 @@ eslintTester.run("method", rule, {
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
+            code: "(node: HTMLElement)['insertAdjacentHTML']('beforebegin', 'raw string');",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
             code: "node.insertAdjacentHTML('beforebegin', (5: string));",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
+            code: "node['insertAdjacentHTML']('beforebegin', (5: string));",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
@@ -350,6 +494,10 @@ eslintTester.run("method", rule, {
         // let without initialization.
         {
             code: "let c; n.insertAdjacentHTML('beforebegin', c)",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let c; n['insertAdjacentHTML']('beforebegin', c)",
             parserOptions: { ecmaVersion: 6 }
         },
     ],
