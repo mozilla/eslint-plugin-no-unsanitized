@@ -975,7 +975,29 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "(node: HTMLElement)['insertAdjacentHTML']('beforebegin', unsafe);",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            errors: [
+                {
+                    message: "Unsafe call to node: HTMLElement.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "node.insertAdjacentHTML('beforebegin', (unsafe: string));",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            errors: [
+                {
+                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
+            code: "node['insertAdjacentHTML']('beforebegin', (unsafe: string));",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
             errors: [
