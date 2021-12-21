@@ -855,16 +855,6 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
-        { // basic support for SequenceExpressions, which always return the last item - fixes #113
-            code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
-            parserOptions: { ecmaVersion: 6 },
-            errors: [
-                {
-                    message: "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression"
-                }
-            ]
-        },
         { // admittedly, this doesnt make a lot of sense, since the func doesnt return a promise
             code: "async () => await foo.insertAdjacentHTML('afterend', blah);",
             parserOptions: { ecmaVersion: 2020 },
