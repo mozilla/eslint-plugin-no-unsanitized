@@ -1095,6 +1095,20 @@ eslintTester.run("method", rule, {
             ]
         },
         {
+            code: "node!.insertAdjacentHTML('beforebegin', htmlString);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            errors: [
+                {
+                    message: "Unsafe call to node!.insertAdjacentHTML for argument 1",
+                    type: "CallExpression"
+                }
+            ]
+        },
+        {
             code: "node!['insertAdjacentHTML']('beforebegin', htmlString);",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
