@@ -39,7 +39,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "a['innerHTML'] = '';",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "a.innerHTML *= 'test';",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "a['innerHTML'] *= 'test';",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -47,7 +55,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "c['innerHTML'] = ``;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "g.innerHTML = Sanitizer.escapeHTML``;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "g['innerHTML'] = Sanitizer.escapeHTML``;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -55,9 +71,18 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "h['innerHTML'] = Sanitizer.escapeHTML`foo`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
             parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "i['innerHTML'] = Sanitizer.escapeHTML`foo${bar}baz`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+
 
         // tests for innerHTML update (+= operator)
         {
@@ -65,7 +90,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "a['innerHTML'] += '';",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "b.innerHTML += \"\";",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "b['innerHTML'] += \"\";",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -73,7 +106,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "c['innerHTML'] += ``;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "g.innerHTML += Sanitizer.escapeHTML``;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "g['innerHTML'] += Sanitizer.escapeHTML``;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -81,7 +122,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "h['innerHTML'] += Sanitizer.escapeHTML`foo`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "i.innerHTML += Sanitizer.escapeHTML`foo${bar}baz`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "i['innerHTML'] += Sanitizer.escapeHTML`foo${bar}baz`;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -89,7 +138,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "i['innerHTML'] += Sanitizer.unwrapSafeHTML(htmlSnippet)",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "i['outerHTML'] += Sanitizer.unwrapSafeHTML(htmlSnippet)",
             parserOptions: { ecmaVersion: 6 }
         },
         {
@@ -97,7 +154,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "let c; c = 123; a['innerHTML'] = `${c}`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "let c; a.innerHTML = `${c}`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "let c; a['innerHTML'] = `${c}`;",
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -108,11 +173,23 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "x['innerHTML'] = `foo`+`bar`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "y['innerHTML'] = '<span>' + 5 + '</span>';",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "document['writeln'](Sanitizer.escapeHTML`<em>${evil}</em>`);",
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -122,17 +199,33 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "u['innerHTML'] = `<span>${'lulz'}</span>`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
             code: "v.innerHTML = `<span>${'lulz'}</span>${55}`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "v['innerHTML'] = `<span>${'lulz'}</span>${55}`;",
             parserOptions: { ecmaVersion: 6 }
         },
         {
             code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
             parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "w['innerHTML'] = `<span>${'lulz'+'meh'}</span>`;",
+            parserOptions: { ecmaVersion: 6 }
+        },
 
         // testing unwrapSafeHTML spread
         {
             code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
+            parserOptions: { ecmaVersion: 6 }
+        },
+        {
+            code: "this.imeList['innerHTML'] = Sanitizer.unwrapSafeHTML(...listHtml);",
             parserOptions: { ecmaVersion: 6 }
         },
 
@@ -152,7 +245,29 @@ eslintTester.run("property", rule, {
             ]
         },
         { // issue 108: adding tests for custom escaper
+            code: "w['innerHTML'] = templateEscaper`<em>${evil}</em>`;",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        taggedTemplates: ["templateEscaper"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
             code: "w.innerHTML = DOMPurify.sanitize('<em>${evil}</em>');",
+            parserOptions: { ecmaVersion: 6 },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
+        { // issue 108: adding tests for custom escaper
+            code: "w['innerHTML'] = DOMPurify.sanitize('<em>${evil}</em>');",
             parserOptions: { ecmaVersion: 6 },
             options: [
                 {
@@ -174,6 +289,14 @@ eslintTester.run("property", rule, {
             }
         },
         {
+            code: "(options as HTMLElement)['innerHTML'] = '<s>safe</s>';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
             code: "(<HTMLElement>items[i](args)).innerHTML = 'rawstring';",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
@@ -182,7 +305,23 @@ eslintTester.run("property", rule, {
             }
         },
         {
+            code: "(<HTMLElement>items[i](args))['innerHTML'] = 'rawstring';",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            }
+        },
+        {
             code: "lol.innerHTML = (5 as string);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+        },
+        {
+            code: "lol['innerHTML'] = (5 as string);",
             parser: PATH_TO_TYPESCRIPT_ESLINT,
             parserOptions: {
                 ecmaVersion: 2018,
@@ -204,6 +343,21 @@ eslintTester.run("property", rule, {
                 }
             ]
         },
+        {
+            code: "node!['innerHTML'] = DOMPurify.sanitize(evil);",
+            parser: PATH_TO_TYPESCRIPT_ESLINT,
+            parserOptions: {
+                ecmaVersion: 2018,
+                sourceType: "module",
+            },
+            options: [
+                {
+                    escape: {
+                        methods: ["DOMPurify.sanitize"]
+                    }
+                }
+            ]
+        },
 
         // Flow support cases
         {
@@ -212,17 +366,37 @@ eslintTester.run("property", rule, {
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
-            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            code: "(x: HTMLElement)['innerHTML'] = 'static string'",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
+            code: "(x: HTMLElement)['innerHTML'] = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
+            code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
+            code: "(x: HTMLElement)['innerHTML'] = '<b>safe</b>'",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
         {
             code: "(items[i](args): HTMLElement).innerHTML = 'rawstring';",
+            parser: PATH_TO_BABEL_ESLINT,
+            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+        },
+        {
+            code: "(items[i](args): HTMLElement)['innerHTML'] = 'rawstring';",
             parser: PATH_TO_BABEL_ESLINT,
             parserOptions: PARSER_OPTIONS_FOR_FLOW,
         },
@@ -233,7 +407,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
         },
         {
+            code: "let literalFromElsewhere = '<b>safe</b>'; y['innerHTML'] = literalFromElsewhere;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
             code: "const literalFromElsewhereWithInnerExpr = '<b>safe</b>'+'yo'; y.innerHTML = literalFromElsewhereWithInnerExpr;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "const literalFromElsewhereWithInnerExpr = '<b>safe</b>'+'yo'; y['innerHTML'] = literalFromElsewhereWithInnerExpr;",
             parserOptions: { ecmaVersion: 6 },
         },
         {
@@ -241,7 +423,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
         },
         {
+            code: "let multiStepVarSearch = '<b>safe</b>'+'yo'; const copy = multiStepVarSearch; y['innerHTML'] = copy;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
             code: "let copies = '<b>safe</b>'; copies = 'stillOK'; y.innerHTML = copies;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "let copies = '<b>safe</b>'; copies = 'stillOK'; y['innerHTML'] = copies;",
             parserOptions: { ecmaVersion: 6 },
         },
         {
@@ -249,7 +439,15 @@ eslintTester.run("property", rule, {
             parserOptions: { ecmaVersion: 6 },
         },
         {
+            code: "let copies = '<b>safe</b>'; if (monday) { copies = 'stillOK'; }; y['innerHTML'] = copies;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
             code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
+            parserOptions: { ecmaVersion: 6 },
+        },
+        {
+            code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y['innerHTML'] = msg;",
             parserOptions: { ecmaVersion: 6 },
         },
     ],
