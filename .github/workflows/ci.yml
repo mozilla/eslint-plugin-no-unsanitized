@@ -2,9 +2,9 @@ name: CI
 
 on:
   push:
-    branches: [master, main]
+    branches: [main]
   pull_request:
-    branches: [master, main]
+    branches: [main]
 
 jobs:
   ci:
@@ -13,7 +13,7 @@ jobs:
     strategy:
       matrix:
         eslint-version: [8.x, 7.x, 6.x]
-        node-version: [16.x, 14.x, 12.x]
+        node-version: [16.x, 14.x]
     steps:
       - uses: actions/checkout@v2
 
