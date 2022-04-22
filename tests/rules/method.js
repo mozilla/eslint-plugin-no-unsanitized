@@ -352,6 +352,15 @@ eslintTester.run("method", rule, {
             code: "let c; n.insertAdjacentHTML('beforebegin', c)",
             parserOptions: { ecmaVersion: 6 }
         },
+        {
+            code: "x.setHTML(evil)"
+        },
+        {
+            code: "x.setHTML(evil, { sanitizer: s })"
+        },
+        {
+            code: "x.setHTML(evil, { sanitizer: new Sanitizer()})"
+        }
     ],
 
     // Examples of code that should trigger the rule
