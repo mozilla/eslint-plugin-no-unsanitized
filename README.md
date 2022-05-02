@@ -10,7 +10,7 @@ The plugin also supports the
 [Sanitizer API](https://developer.mozilla.org/en-US/docs/Web/API/HTML_Sanitizer_API)
 and calls to `.setHTML()` are also allowed by default.
 
-This plugin is build for and used within Mozilla to maintain and improve the security
+This plugin is built for and used within Mozilla to maintain and improve the security
 of our products and services.
 
 # Rule Details
