@@ -118,6 +118,9 @@ eslintTester.run("method", rule, {
             parserOptions: { ecmaVersion: 6 }
         },
         {
+            code: "(a.b = c)(d);",
+        },
+        {
             code: "(text.endsWith('\\n') ? document.write : document.writeln)(text)"
         },
 
@@ -758,6 +761,20 @@ eslintTester.run("method", rule, {
                 }
             ]
         },
+
+        // Couldn't come up with an example that would work now, so let's uncomment this when
+        // https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/115
+        // is done.
+        // {
+        //     code: "var shortcut = node.insertAdjacentHTML.bind(node); "
+        //         + "(a.b = shortcut)('beforebegin', evil)",
+        //     errors: [
+        //         {
+        //             message: "Unsafe call to node.insertAdjacentHTML for argument 1",
+        //             type: "CallExpression"
+        //         }
+        //     ]
+        // },
         {
             code: "(9)()",
             errors: [
