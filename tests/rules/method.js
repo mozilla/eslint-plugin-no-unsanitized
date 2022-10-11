@@ -360,7 +360,10 @@ eslintTester.run("method", rule, {
         },
         {
             code: "x.setHTML(evil, { sanitizer: new Sanitizer()})"
-        }
+        },
+        {
+            code: "(info.current = type)(child_ctx)",
+        },
     ],
 
     // Examples of code that should trigger the rule
