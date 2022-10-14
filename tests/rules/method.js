@@ -364,6 +364,9 @@ eslintTester.run("method", rule, {
         {
             code: "(info.current = type)(child_ctx)",
         },
+        {
+            code: "(info.current = n.insertAdjacentHTML)('beforebegin', 'innocent')",
+        }
     ],
 
     // Examples of code that should trigger the rule
@@ -949,6 +952,14 @@ eslintTester.run("method", rule, {
             ],
             parserOptions: { ecmaVersion: 6 }
         },
-
+        {
+            code: "(info.current = n.insertAdjacentHTML)('beforebegin', c)",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
     ]
 });
