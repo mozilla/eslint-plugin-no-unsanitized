@@ -366,7 +366,14 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(info.current = n.insertAdjacentHTML)('beforebegin', 'innocent')",
+        },
+        {
+            code: "(false ||= n.insertAdjacentHTML)('beforebegin', 'innocent')",
+        },
+        {
+            code: "(n.insertAdjacentHTML &&= false)('beforebegin', 'innocent')",
         }
+
     ],
 
     // Examples of code that should trigger the rule
@@ -961,5 +968,49 @@ eslintTester.run("method", rule, {
                 }
             ],
         },
+        {
+
+            // The issue with this testcase is, that it might not actually lead to a call to insertAdjacentHTML.
+            code: "(false ||= n.insertAdjacentHTML)('beforebegin', evil)",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
+        {
+
+            // The issue with this testcase is, that it might not actually lead to a call to insertAdjacentHTML.
+            code: "(n.insertAdjacentHTML ||= false)('beforebegin', evil)",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
+        {
+
+            // The issue with this testcase is, that it might not actually lead to a call to insertAdjacentHTML.
+            code: "(false &&= n.insertAdjacentHTML)('beforebegin', evil)",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        },
+        {
+
+            // The issue with this testcase is, that it might not actually lead to a call to insertAdjacentHTML.
+            code: "(n.insertAdjacentHTML &&= false)('beforebegin', evil)",
+            errors: [
+                {
+                    message: /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                    type: "CallExpression"
+                }
+            ],
+        }
     ]
 });
