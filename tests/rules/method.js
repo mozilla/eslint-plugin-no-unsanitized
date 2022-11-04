@@ -366,6 +366,12 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(info.current = n.insertAdjacentHTML)('beforebegin', 'innocent')",
+        },
+        {
+
+            // #214: We also allow *harmful* parameters.
+            code: "let l = ['afterend', 'harmless']; foo.insertAdjacentHTML(...l);",
+            parserOptions: {ecmaVersion: 2020 },
         }
     ],
 
