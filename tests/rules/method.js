@@ -336,6 +336,10 @@ eslintTester.run("method", rule, {
                 sourceType: "module",
             }
         },
+        {
+            code: "let l = ['afterend', 'harmless']; foo.insertAdjacentHTML(...l);",
+            parserOptions: {ecmaVersion: 2020 },
+        }
     ],
 
     // Examples of code that should trigger the rule
