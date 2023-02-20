@@ -86,5 +86,5 @@ TBD
 
 
 #### More
-* See [our rule schema definition](SCHEMA.md). 
+* See [our rule schema definition](https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/main/SCHEMA.md). 
 
