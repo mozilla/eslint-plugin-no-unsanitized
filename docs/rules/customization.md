@@ -7,7 +7,7 @@ This will be used to check code like here:
 ```js
 const greeting_template = `<p>Hello World!</p>`;
 // ... lots of other code in between ...
-someElemenet.innerHTML = greeting_template;
+someElement.innerHTML = greeting_template;
 ```
 
 Currently, backtracing will only allow const and let variables that contain string literals only.
