@@ -22,8 +22,8 @@
         "node-polyfill-webpack-plugin": "^2.0.1",
         "nyc": "^15.1.0",
         "typescript": "^3.9.7",
-        "webpack": "^5.75.0",
-        "webpack-cli": "^5.0.1"
+        "webpack": "^5.89.0",
+        "webpack-cli": "^5.1.4"
     },
     "peerDependencies": {
         "eslint": "^6 || ^7 || ^8"
