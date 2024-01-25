@@ -378,7 +378,12 @@ eslintTester.run("method", rule, {
             // #214: We also allow *harmful* parameters.
             code: "foo.insertAdjacentHTML(wrongParamCount);",
             parserOptions: {ecmaVersion: 2020 },
-        }
+        },
+        {
+
+            // # 232: disallow setHTMLUnsafe, but OK with static string.
+            code: "foo.setHTMLUnsafe('static string')",
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -973,5 +978,15 @@ eslintTester.run("method", rule, {
                 }
             ],
         },
+        {
+            code: "foo.setHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.setHTMLUnsafe for argument 0/,
+                    type: "CallExpression",
+                },
+            ],
+        },
+
     ]
 });
