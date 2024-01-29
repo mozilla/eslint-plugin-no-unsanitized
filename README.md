@@ -49,7 +49,7 @@ bar.innerHTML = escapeHTML`<a href='${url}'>About</a>`;
 # Install
 
 With **yarn** or **npm**:
-```
+```bash
 $ yarn add -D eslint-plugin-no-unsanitized
 $ npm install --save-dev eslint-plugin-no-unsanitized
 ```
@@ -58,14 +58,14 @@ $ npm install --save-dev eslint-plugin-no-unsanitized
 
 In your `.eslintrc.json` file enable this rule with the following:
 
-```
+```json
 {
     "extends": ["plugin:no-unsanitized/DOM"]
 }
 ```
 
 Or:
-```
+```json
 {
     "plugins": ["no-unsanitized"],
     "rules": {
