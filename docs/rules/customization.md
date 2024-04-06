@@ -4,6 +4,7 @@
 
 The plugin allows a limit back-tracing of variables.
 This will be used to check code like here:
+
 ```js
 const greeting_template = `<p>Hello World!</p>`;
 // ... lots of other code in between ...
@@ -19,28 +20,29 @@ option `variableTracing` to `false`.**
 Both values are supported and tested in CI.
 
 ## Customization Examples
-You can customize the way this rule works in various ways.
-* Add to the list of properties or functions to be checked for potentially
-dangers variable input
-* Add to the list of allowed escaping functions to mitigate security concerns
-* Besides adding to the list, you may override the defaults and provide an exhaustive list yourself
 
+You can customize the way this rule works in various ways.
+
+-   Add to the list of properties or functions to be checked for potentially
+    dangers variable input
+-   Add to the list of allowed escaping functions to mitigate security concerns
+-   Besides adding to the list, you may override the defaults and provide an exhaustive list yourself
 
 ### Disallow the `html` function by specifically checking input for the first function parameter
+
 ```json
 {
- "rules": {
+    "rules": {
         "no-unsanitized/method": [
             "error",
-            {
-            },
+            {},
             {
                 "html": {
                     "properties": [0]
                 }
             }
         ]
-  }
+    }
 }
 ```
 
@@ -81,10 +83,10 @@ dangers variable input
 }
 ```
 
-### Override list of escaping functions for property assignments only 
+### Override list of escaping functions for property assignments only
+
 TBD
 
-
 #### More
-* See [our rule schema definition](https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/main/SCHEMA.md). 
 
+-   See [our rule schema definition](https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/main/SCHEMA.md).

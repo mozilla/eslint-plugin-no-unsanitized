@@ -1,35 +1,35 @@
 name: CI
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
 
 jobs:
-  ci:
-    name: 'Test: Node ${{ matrix.node-version }} - ESLint ${{ matrix.eslint-version }}'
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        eslint-version: [8.x, 7.x, 6.x]
-        node-version: [16.x, 14.x]
-    steps:
-      - uses: actions/checkout@v2
+    ci:
+        name: "Test: Node ${{ matrix.node-version }} - ESLint ${{ matrix.eslint-version }}"
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                eslint-version: [8.x, 7.x, 6.x]
+                node-version: [16.x, 14.x]
+        steps:
+            - uses: actions/checkout@v2
 
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
 
-      - name: Use ESLint ${{ matrix.eslint-version }}
-        run: yarn upgrade eslint@${{ matrix.eslint-version }}
+            - name: Use ESLint ${{ matrix.eslint-version }}
+              run: yarn upgrade eslint@${{ matrix.eslint-version }}
 
-      - name: Install
-        run: yarn install
+            - name: Install
+              run: yarn install
 
-      - name: Lint
-        run: yarn run lint
+            - name: Lint
+              run: yarn run lint
 
-      - name: Test
-        run: yarn run test
+            - name: Test
+              run: yarn run test
