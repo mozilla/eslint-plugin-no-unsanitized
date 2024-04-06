@@ -1,7 +1,7 @@
 {
     "rules": {
         "lines-around-comment": [
-            2,
+            "error",
             {
                 "allowArrayStart": true,
                 "allowBlockStart": true,
@@ -10,17 +10,53 @@
                 "beforeLineComment": true
             }
         ],
-        "prefer-template": [2],
-        "object-shorthand": [2],
-        "prefer-const": [2],
-        "no-var": [2],
-        "valid-jsdoc": [2],
-        "require-jsdoc": [2]
+        "prefer-template": ["error"],
+        "object-shorthand": ["error"],
+        "prefer-const": ["error"],
+        "no-var": ["error"],
+
+        // Handling valid jsdoc.
+        "jsdoc/check-access": "error",
+        // Handled by prettier
+        // "jsdoc/check-alignment": "error",
+        "jsdoc/check-param-names": "error",
+        "jsdoc/check-property-names": "error",
+        "jsdoc/check-tag-names": "error",
+        "jsdoc/check-types": "error",
+        "jsdoc/empty-tags": "error",
+        "jsdoc/tag-lines": ["error", "never", { "startLines": 1 }],
+        "jsdoc/no-multi-asterisks": "error",
+        "jsdoc/require-param-type": "error",
+        "jsdoc/require-returns-type": "error",
+        "jsdoc/valid-types": "error",
+
+        // Handling requiring jsdoc.
+        "jsdoc/require-jsdoc": [
+            "error",
+            {
+                "require": {
+                    "ClassDeclaration": true,
+                    "FunctionDeclaration": false
+                }
+            }
+        ],
+        "jsdoc/require-param": "error",
+        "jsdoc/require-param-description": "error",
+        "jsdoc/require-param-name": "error",
+        "jsdoc/require-property": "error",
+        "jsdoc/require-property-description": "error",
+        "jsdoc/require-property-name": "error",
+        "jsdoc/require-property-type": "error",
+        "jsdoc/require-returns": "error",
+        "jsdoc/require-returns-check": "error",
+        "jsdoc/require-yields": "error",
+        "jsdoc/require-yields-check": "error"
     },
     "env": {
         "es6": true,
         "browser": true,
         "node": true
     },
+    "plugins": ["jsdoc"],
     "extends": ["eslint:recommended", "prettier"]
 }

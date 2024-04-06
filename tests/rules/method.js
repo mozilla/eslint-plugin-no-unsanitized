@@ -1,5 +1,5 @@
 /**
- * @fileoverview Test for no-unsanitized rule
+ * @file Test for no-unsanitized rule
  * @author Frederik Braun et al.
  * @copyright 2015-2017 Mozilla Corporation. All rights reserved
  */
