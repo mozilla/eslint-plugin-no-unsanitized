@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized.svg?branch=master)](https://travis-ci.org/mozilla/eslint-plugin-no-unsanitized)
+
 # Disallow unsanitized code (no-unsanitized)
 
 These rules disallow unsafe coding practices that may result into security
@@ -16,15 +17,16 @@ of our products and services.
 # Rule Details
 
 ## method
-The *method* rule disallows certain function calls.
+
+The _method_ rule disallows certain function calls.
 E.g., `document.write()` or `insertAdjacentHTML()`.
 See [docs/rules/method.md](docs/rules/method.md) for more.
 
 ## property
-The *property* rule disallows certain assignment expressions, e.g., to `innerHTML`.
+
+The _property_ rule disallows certain assignment expressions, e.g., to `innerHTML`.
 
 See [docs/rules/property.md](docs/rules/property.md) for more.
-
 
 ## Examples
 
@@ -32,7 +34,7 @@ Here are a few examples of code that we do not want to allow:
 
 ```js
 foo.innerHTML = input.value;
-bar.innerHTML = "<a href='"+url+"'>About</a>";
+bar.innerHTML = "<a href='" + url + "'>About</a>";
 ```
 
 A few examples of allowed practices:
@@ -43,12 +45,10 @@ bar.innerHTML = "<a href='/about.html'>About</a>";
 bar.innerHTML = escapeHTML`<a href='${url}'>About</a>`;
 ```
 
-
-
-
 # Install
 
 With **yarn** or **npm**:
+
 ```bash
 $ yarn add -D eslint-plugin-no-unsanitized
 $ npm install --save-dev eslint-plugin-no-unsanitized
@@ -65,6 +65,7 @@ In your `.eslintrc.json` file enable this rule with the following:
 ```
 
 Or:
+
 ```json
 {
     "plugins": ["no-unsanitized"],
@@ -76,4 +77,5 @@ Or:
 ```
 
 # Documentation
+
 See [docs/](docs/).

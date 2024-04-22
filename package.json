@@ -16,8 +16,10 @@
         "@babel/plugin-syntax-flow": "^7.16.0",
         "@typescript-eslint/parser": "^5.2.0",
         "eslint": "^8.1.0",
+        "eslint-config-prettier": "9.1.0",
         "mocha": "^9.2.0",
         "nyc": "^15.1.0",
+        "prettier": "3.2.5",
         "typescript": "^3.9.7"
     },
     "peerDependencies": {
@@ -41,7 +43,7 @@
     },
     "scripts": {
         "test": "nyc mocha tests/rules/",
-        "lint": "eslint ."
+        "lint": "eslint . && prettier --check ."
     },
     "files": [
         "LICENSE",
