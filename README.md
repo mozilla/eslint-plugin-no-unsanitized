@@ -61,7 +61,7 @@ $ npm install --save-dev eslint-plugin-no-unsanitized
 ```js
 import nounsanitized from "eslint-plugin-no-unsanitized";
 
-export default config = [nounsanitized.configs.DOM];
+export default config = [nounsanitized.configs.recommended];
 ```
 
 or
@@ -87,7 +87,7 @@ In your `.eslintrc.json` file enable this rule with the following:
 
 ```json
 {
-    "extends": ["plugin:no-unsanitized/DOM-legacy"]
+    "extends": ["plugin:no-unsanitized/recommended-legacy"]
 }
 ```
 
