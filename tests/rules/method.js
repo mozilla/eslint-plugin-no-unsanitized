@@ -1,5 +1,5 @@
 /**
- * @fileoverview Test for no-unsanitized rule
+ * @file Test for no-unsanitized rule
  * @author Frederik Braun et al.
  * @copyright 2015-2017 Mozilla Corporation. All rights reserved
  */
@@ -10,16 +10,97 @@
 
 const rule = require("../../lib/rules/method");
 const RuleTester = require("eslint").RuleTester;
+const { ESLint } = require("eslint");
+const preESLintv9 = ESLint.version.split(".")[0] < 9;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
 const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
 
-const PARSER_OPTIONS_FOR_FLOW = {
-    requireConfigFile: false,
-    babelOptions: {
-        plugins: ["@babel/plugin-syntax-flow"],
-    },
-};
+const babelParser = require(PATH_TO_BABEL_ESLINT);
+const typescriptParser = require(PATH_TO_TYPESCRIPT_ESLINT);
+
+const ECMA_VERSION_6_ONLY_OPTIONS = preESLintv9
+    ? {
+          parserOptions: { ecmaVersion: 6 },
+      }
+    : {
+          languageOptions: { parserOptions: { ecmaVersion: 6 } },
+      };
+const ECMA_VERSION_8_ONLY_OPTIONS = preESLintv9
+    ? {
+          parserOptions: { ecmaVersion: 8 },
+      }
+    : {
+          languageOptions: { parserOptions: { ecmaVersion: 8 } },
+      };
+
+const ECMA_VERSION_2020_ONLY_OPTIONS = preESLintv9
+    ? {
+          parserOptions: { ecmaVersion: 2020 },
+      }
+    : {
+          languageOptions: { parserOptions: { ecmaVersion: 2020 } },
+      };
+
+const BABEL_ONLY_OPTIONS = preESLintv9
+    ? {
+          parser: PATH_TO_BABEL_ESLINT,
+      }
+    : {
+          languageOptions: {
+              parser: babelParser,
+          },
+      };
+
+const BABEL_OPTIONS_FOR_FLOW = preESLintv9
+    ? {
+          parser: PATH_TO_BABEL_ESLINT,
+          parserOptions: {
+              requireConfigFile: false,
+              babelOptions: {
+                  plugins: ["@babel/plugin-syntax-flow"],
+              },
+          },
+      }
+    : {
+          languageOptions: {
+              parser: babelParser,
+              parserOptions: {
+                  requireConfigFile: false,
+                  babelOptions: {
+                      plugins: ["@babel/plugin-syntax-flow"],
+                  },
+              },
+          },
+      };
+
+const TYPESCRIPT_OPTIONS = preESLintv9
+    ? {
+          parser: PATH_TO_TYPESCRIPT_ESLINT,
+          parserOptions: {
+              ecmaVersion: 2018,
+              sourceType: "module",
+          },
+      }
+    : {
+          languageOptions: {
+              parser: typescriptParser,
+              parserOptions: {
+                  ecmaVersion: 2018,
+                  sourceType: "module",
+              },
+          },
+      };
+
+const FANTASY_CALLEE_OPTIONS = preESLintv9
+    ? {
+          parser: require.resolve("../parsers/fantasy-callee"),
+      }
+    : {
+          languageOptions: {
+              parser: require("../parsers/fantasy-callee"),
+          },
+      };
 
 //------------------------------------------------------------------------------
 // Tests
@@ -35,33 +116,33 @@ eslintTester.run("method", rule, {
         // tests for insertAdjacentHTML calls
         {
             code: "n.insertAdjacentHTML('afterend', 'meh');",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "n.insertAdjacentHTML('afterend', `<br>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "n.insertAdjacentHTML('afterend', Sanitizer.escapeHTML`${title}`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // document.write/writeln
         {
             code: "document.write('lulz');",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "document.write();",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "otherNodeWeDontCheckFor.writeln(evil);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Native method (Check customize code doesn't include these)
@@ -114,7 +195,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "let endTime = (mapEnd || (e => e.delta))(this._data[this._data.length - 1]);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "(text.endsWith('\\n') ? document.write : document.writeln)(text)",
@@ -136,7 +217,7 @@ eslintTester.run("method", rule, {
         {
             // issue 79
             code: "range.createContextualFragment(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -160,28 +241,24 @@ eslintTester.run("method", rule, {
         // Issue 135: Check literal imports in all parsers:
         {
             code: "import('lodash')",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
         },
 
         // Issue 83: Support import() expressions as parsed by @babel/eslint-parser
         {
             code: "import('lodash')",
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
         },
 
         // Issue 135: Check literal imports in all parsers:
         {
             code: "import('lodash')",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2021,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             // issue 108: adding tests for custom escaper
             code: "range.createContextualFragment(templateEscaper`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -193,7 +270,7 @@ eslintTester.run("method", rule, {
         {
             // issue 108: adding tests for custom escaper
             code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil));",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -205,7 +282,7 @@ eslintTester.run("method", rule, {
         {
             // issue 108: adding tests for custom escaper
             code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil, options));",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -217,7 +294,7 @@ eslintTester.run("method", rule, {
         {
             // issue 108: adding tests for custom escaper
             code: "n.insertAdjacentHTML('afterend', DOMPurify.sanitize(evil, {ALLOWED_TAGS: ['b']}));",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -229,19 +306,19 @@ eslintTester.run("method", rule, {
         {
             // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
             code: "describe.each`table`(name, fn, timeout)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "document.write`text`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "document.write`text ${'static string'}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "custom`text ${variable}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {},
                 {
@@ -253,7 +330,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "custom`text ${'string'}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {},
                 {
@@ -266,100 +343,81 @@ eslintTester.run("method", rule, {
         {
             // This is allowed because of how tagged templates pass function parameters
             code: "document.write`text ${variable}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "let a = (0,1,2,34);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             // issue #122 calling an await expression
             code: "(async function()  { (await somePromise)(); })",
-            parserOptions: { ecmaVersion: 8 },
+            ...ECMA_VERSION_8_ONLY_OPTIONS,
         },
         {
             // issue #122 calling an await expression
             // note how we won't be able to tell if the promise resolves to foo.insertAdjacentHTML
             code: "async () => (await TheRuleDoesntKnowWhatIsBeingReturnedHere())('afterend', blah);",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
         },
         {
             // Regression test for #124, make sure we don't raise an "Unexpected Callee" error.
             code: "(e = this.n[n.i])(i, r)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             // Regression test for #124, make sure we go deeper into validating the AssignmentExpression.
             code: "(e = node.insertAdjacentHTML('beforebegin', '<s>safe</s>'))()",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Typescript support tests
         {
             code: "node.insertAdjacentHTML('beforebegin', (5 as string));",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             code: "node!.insertAdjacentHTML('beforebegin', 'raw string');",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             code: "node!().insertAdjacentHTML('beforebegin', 'raw string');",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
 
         // Flow support tests
         {
             code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', 'raw string');",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
         {
             code: "node.insertAdjacentHTML('beforebegin', (5: string));",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
         {
             code: "(insertAdjacentHTML: function)('afterend', 'static string');",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
 
         // Issue 135: method calls to import should not warn.
         {
             code: "foo.import(bar)",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
         },
         {
             code: "foo.import(bar)",
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
         },
         {
             code: "foo.import(bar)",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2021,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
 
         // let without initialization.
         {
             code: "let c; n.insertAdjacentHTML('beforebegin', c)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "x.setHTML(evil)",
@@ -379,12 +437,12 @@ eslintTester.run("method", rule, {
         {
             // #214: We also allow *harmful* parameters.
             code: "let l = ['afterend', 'harmless']; foo.insertAdjacentHTML(...l);",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
         },
         {
             // #214: We also allow *harmful* parameters.
             code: "foo.insertAdjacentHTML(wrongParamCount);",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
         },
         {
             // # 232: disallow setHTMLUnsafe, but OK with static string.
@@ -481,7 +539,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Broken config
@@ -556,7 +614,7 @@ eslintTester.run("method", rule, {
         // Issue 135: Disallow import() with non-literal params
         {
             code: "import(foo)",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
@@ -566,7 +624,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "import(foo)",
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
@@ -576,11 +634,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "import(foo)",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2021,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
@@ -591,7 +645,7 @@ eslintTester.run("method", rule, {
         {
             // basic support for SequenceExpressions, which always return the last item - fixes #113
             code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -604,7 +658,7 @@ eslintTester.run("method", rule, {
             // issue 108: adding tests for custom escaper
             // in this case we allow a function for templates, but it's used as a method
             code: "n.insertAdjacentHTML('afterend', templateEscaper(evil, options));",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -624,7 +678,7 @@ eslintTester.run("method", rule, {
             // issue 108: adding tests for custom escaper
             // in this case we allow a function for methods, but it's used fo template strings
             code: "n.insertAdjacentHTML('afterend', sanitize`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -642,7 +696,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     defaultDisable: true,
@@ -670,7 +724,7 @@ eslintTester.run("method", rule, {
         // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
         {
             code: "describe.each`table${node.insertAdjacentHTML('beforebegin', htmlString)}`(name, fn, timeout)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -681,7 +735,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "describe.each`table${document.writeln(evil)}`(name, fn, timeout)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
@@ -691,7 +745,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "node.insertAdjacentHTML`text ${variable}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -702,7 +756,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "custom`text ${variable}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {},
                 {
@@ -720,7 +774,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "custom`text ${variable} ${variable2}`",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {},
                 {
@@ -737,21 +791,9 @@ eslintTester.run("method", rule, {
             ],
         },
         {
-            // basic support for SequenceExpressions, which always return the last item - fixes #113
-            code: "(0, node.insertAdjacentHTML)('beforebegin', evil);",
-            parserOptions: { ecmaVersion: 6 },
-            errors: [
-                {
-                    message:
-                        "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
-                },
-            ],
-        },
-        {
             // admittedly, this doesnt make a lot of sense, since the func doesnt return a promise
             code: "async () => await foo.insertAdjacentHTML('afterend', blah);",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -763,7 +805,7 @@ eslintTester.run("method", rule, {
         {
             // admittedly, this doesnt make a lot of sense, since the func doesnt return a promise
             code: "async () => (await foo.insertAdjacentHTML('afterend', blah))();",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -774,7 +816,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "async () => (await foo)().insertAdjacentHTML('afterend', blah);",
-            parserOptions: { ecmaVersion: 2020 },
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -786,7 +828,7 @@ eslintTester.run("method", rule, {
         {
             // AssignmentExpression, ensure we are detecting the pattern from the right part - Regression test for #124
             code: "(e = node.insertAdjacentHTML)('beforebegin', evil)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -798,7 +840,7 @@ eslintTester.run("method", rule, {
         {
             // Regression test for #124, make sure we go deeper and detect the unsafe pattern
             code: "(e = node.insertAdjacentHTML('beforebegin', evil))()",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message:
@@ -823,11 +865,7 @@ eslintTester.run("method", rule, {
         // Null coalescing operator
         {
             code: "node!().insertAdjacentHTML('beforebegin', htmlString);",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message:
@@ -838,11 +876,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "node!.insertAdjacentHTML('beforebegin', htmlString);",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message:
@@ -853,11 +887,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(x as HTMLElement).insertAdjacentHTML('beforebegin', htmlString)",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message:
@@ -871,8 +901,7 @@ eslintTester.run("method", rule, {
 
         {
             code: "(node: HTMLElement).insertAdjacentHTML('beforebegin', unsafe);",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message:
@@ -883,8 +912,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "node.insertAdjacentHTML('beforebegin', (unsafe: string));",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message:
@@ -895,8 +923,7 @@ eslintTester.run("method", rule, {
         },
         {
             code: "(insertAdjacentHTML: function)('beforebegin', unsafe);",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe call to insertAdjacentHTML for argument 1",
@@ -926,7 +953,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; n.insertAdjacentHTML('beforebegin', copies);",
@@ -937,7 +964,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Variable tracked back to a parameter part of a FunctionDeclaration.
@@ -950,7 +977,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Variable tracked back to a parameter part of a FunctionExpression.
@@ -963,7 +990,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Variable tracked back to a parameter part of a ArrowFunctionExpression.
@@ -976,11 +1003,11 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "§fantasyCallee§()",
-            parser: require.resolve("../parsers/fantasy-callee"),
+            ...FANTASY_CALLEE_OPTIONS,
             errors: [
                 {
                     message:
@@ -1006,7 +1033,7 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "(info.current = n.insertAdjacentHTML)('beforebegin', c)",

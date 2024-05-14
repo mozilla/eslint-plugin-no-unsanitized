@@ -1,5 +1,5 @@
 /**
- * @fileoverview Test for no-unsanitized rule
+ * @file Test for no-unsanitized rule
  * @author Frederik Braun et al.
  * @copyright 2015-2017 Mozilla Corporation. All rights reserved
  */
@@ -10,16 +10,82 @@
 
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
+const { ESLint } = require("eslint");
+const preESLintv9 = ESLint.version.split(".")[0] < 9;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
 const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
 
-const PARSER_OPTIONS_FOR_FLOW = {
-    requireConfigFile: false,
-    babelOptions: {
-        plugins: ["@babel/plugin-syntax-flow"],
-    },
-};
+const babelParser = require(PATH_TO_BABEL_ESLINT);
+const typescriptParser = require(PATH_TO_TYPESCRIPT_ESLINT);
+
+const ECMA_VERSION_6_ONLY_OPTIONS = preESLintv9
+    ? {
+          parserOptions: { ecmaVersion: 6 },
+      }
+    : {
+          languageOptions: { parserOptions: { ecmaVersion: 6 } },
+      };
+
+const BABEL_ONLY_OPTIONS = preESLintv9
+    ? {
+          parser: PATH_TO_BABEL_ESLINT,
+      }
+    : {
+          languageOptions: {
+              parser: babelParser,
+          },
+      };
+
+const BABEL_OPTIONS_FOR_FLOW = preESLintv9
+    ? {
+          parser: PATH_TO_BABEL_ESLINT,
+          parserOptions: {
+              requireConfigFile: false,
+              babelOptions: {
+                  plugins: ["@babel/plugin-syntax-flow"],
+              },
+          },
+      }
+    : {
+          languageOptions: {
+              parser: babelParser,
+              parserOptions: {
+                  requireConfigFile: false,
+                  babelOptions: {
+                      plugins: ["@babel/plugin-syntax-flow"],
+                  },
+              },
+          },
+      };
+
+const TYPESCRIPT_OPTIONS = preESLintv9
+    ? {
+          parser: PATH_TO_TYPESCRIPT_ESLINT,
+          parserOptions: {
+              ecmaVersion: 2018,
+              sourceType: "module",
+          },
+      }
+    : {
+          languageOptions: {
+              parser: typescriptParser,
+              parserOptions: {
+                  ecmaVersion: 2018,
+                  sourceType: "module",
+              },
+          },
+      };
+
+const FANTASY_OPERATOR_OPTIONS = preESLintv9
+    ? {
+          parser: require.resolve("../parsers/fantasy-operator"),
+      }
+    : {
+          languageOptions: {
+              parser: require("../parsers/fantasy-operator"),
+          },
+      };
 
 //------------------------------------------------------------------------------
 // Tests
@@ -35,103 +101,103 @@ eslintTester.run("property", rule, {
         // tests for innerHTML equals
         {
             code: "a.innerHTML = '';",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "a.innerHTML *= 'test';",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "c.innerHTML = ``;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "g.innerHTML = Sanitizer.escapeHTML``;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "h.innerHTML = Sanitizer.escapeHTML`foo`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "i.innerHTML = Sanitizer.escapeHTML`foo${bar}baz`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // tests for innerHTML update (+= operator)
         {
             code: "a.innerHTML += '';",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: 'b.innerHTML += "";',
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "c.innerHTML += ``;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "g.innerHTML += Sanitizer.escapeHTML``;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "h.innerHTML += Sanitizer.escapeHTML`foo`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "i.innerHTML += Sanitizer.escapeHTML`foo${bar}baz`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "i.innerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "i.outerHTML += Sanitizer.unwrapSafeHTML(htmlSnippet)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let c; c = 123; a.innerHTML = `${c}`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let c; a.innerHTML = `${c}`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // (binary) expressions
         {
             code: "x.innerHTML = `foo`+`bar`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "y.innerHTML = '<span>' + 5 + '</span>';",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "document.writeln(Sanitizer.escapeHTML`<em>${evil}</em>`);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // template string expression tests
         {
             code: "u.innerHTML = `<span>${'lulz'}</span>`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "v.innerHTML = `<span>${'lulz'}</span>${55}`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "w.innerHTML = `<span>${'lulz'+'meh'}</span>`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // testing unwrapSafeHTML spread
         {
             code: "this.imeList.innerHTML = Sanitizer.unwrapSafeHTML(...listHtml);",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Native method (Check customize code doesn't include these)
@@ -141,7 +207,7 @@ eslintTester.run("property", rule, {
         {
             // issue 108: adding tests for custom escaper
             code: "w.innerHTML = templateEscaper`<em>${evil}</em>`;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -153,7 +219,7 @@ eslintTester.run("property", rule, {
         {
             // issue 108: adding tests for custom escaper
             code: "w.innerHTML = DOMPurify.sanitize('<em>${evil}</em>');",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             options: [
                 {
                     escape: {
@@ -167,35 +233,19 @@ eslintTester.run("property", rule, {
         // raw strings can be assigned to innerHTML
         {
             code: "(options as HTMLElement).innerHTML = '<s>safe</s>';",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             code: "(<HTMLElement>items[i](args)).innerHTML = 'rawstring';",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             code: "lol.innerHTML = (5 as string);",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
         },
         {
             code: "node!.innerHTML = DOMPurify.sanitize(evil);",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             options: [
                 {
                     escape: {
@@ -208,49 +258,45 @@ eslintTester.run("property", rule, {
         // Flow support cases
         {
             code: "(x: HTMLElement).innerHTML = 'static string'",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
         {
             code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
         {
             code: "(x: HTMLElement).innerHTML = '<b>safe</b>'",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
         {
             code: "(items[i](args): HTMLElement).innerHTML = 'rawstring';",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
         },
 
         // support for variables that are declared elsewhere
         {
             code: "let literalFromElsewhere = '<b>safe</b>'; y.innerHTML = literalFromElsewhere;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "const literalFromElsewhereWithInnerExpr = '<b>safe</b>'+'yo'; y.innerHTML = literalFromElsewhereWithInnerExpr;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let multiStepVarSearch = '<b>safe</b>'+'yo'; const copy = multiStepVarSearch; y.innerHTML = copy;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let copies = '<b>safe</b>'; copies = 'stillOK'; y.innerHTML = copies;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let copies = '<b>safe</b>'; if (monday) { copies = 'stillOK'; }; y.innerHTML = copies;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
     ],
 
@@ -307,7 +353,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "t.innerHTML = `<span>${'foobar'}</span>${evil}`;",
@@ -317,7 +363,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // (binary) expressions
@@ -371,7 +417,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
@@ -381,27 +427,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
-        },
-        {
-            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
-            errors: [
-                {
-                    message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
-                },
-            ],
-            parserOptions: { ecmaVersion: 6 },
-        },
-        {
-            code: "y.innerHTML = ((arrow_function)=>null)`some HTML`",
-            errors: [
-                {
-                    message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
-                },
-            ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // testing unwrapSafeHTML spread sanitizer typo
@@ -413,7 +439,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // the previous override for manual review and legacy code is now invalid
@@ -425,7 +451,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "function foo() { return this().innerHTML = evil; };",
@@ -435,13 +461,13 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // issue 154: Adding tests for TaggedTemplateExpression callee https://jestjs.io/docs/api#2-describeeachtablename-fn-timeout
         {
             code: "describe.each`table${m.innerHTML = htmlString}`(name, fn, timeout)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -451,7 +477,7 @@ eslintTester.run("property", rule, {
         },
         {
             code: "describe.each`table${t.innerHTML = `<span>${name}</span>`}`(name, fn, timeout)",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -463,11 +489,7 @@ eslintTester.run("property", rule, {
         // Typescript support cases
         {
             code: "x!().innerHTML = htmlString",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -477,11 +499,7 @@ eslintTester.run("property", rule, {
         },
         {
             code: "(x as HTMLElement).innerHTML = htmlString",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -491,11 +509,7 @@ eslintTester.run("property", rule, {
         },
         {
             code: "lol.innerHTML = (foo as string);",
-            parser: PATH_TO_TYPESCRIPT_ESLINT,
-            parserOptions: {
-                ecmaVersion: 2018,
-                sourceType: "module",
-            },
+            ...TYPESCRIPT_OPTIONS,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -507,8 +521,7 @@ eslintTester.run("property", rule, {
         // Flow support cases
         {
             code: "(x: HTMLElement).innerHTML = htmlString",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -518,8 +531,7 @@ eslintTester.run("property", rule, {
         },
         {
             code: "node.innerHTML = (foo: string);",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -529,8 +541,7 @@ eslintTester.run("property", rule, {
         },
         {
             code: "(items[i](args): HTMLElement).innerHTML = unsafe;",
-            parser: PATH_TO_BABEL_ESLINT,
-            parserOptions: PARSER_OPTIONS_FOR_FLOW,
+            ...BABEL_OPTIONS_FOR_FLOW,
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
@@ -548,7 +559,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
         },
         {
             code: "yoink.innerHTML ||= bar;",
@@ -558,7 +569,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
         },
         {
             code: "yoink.innerHTML ??= bar;",
@@ -568,7 +579,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parser: PATH_TO_BABEL_ESLINT,
+            ...BABEL_ONLY_OPTIONS,
         },
 
         // Ensure normalizeMethodCall expects a CallExpression with a CallExpression callee.
@@ -580,7 +591,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Ensure normalizeMethodCall expects a CallExpression with a ConditionalExpression callee.
@@ -592,7 +603,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
 
         // Explicitly cover behavior on new unexpected operators.
@@ -604,7 +615,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let copies = '<b>safe</b>'; copies = suddenlyUnsafe; y.innerHTML = copies;",
@@ -615,7 +626,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let copies = '<b>safe</b>'; if (monday) { copies = badness }; y.innerHTML = copies;",
@@ -626,7 +637,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: `let copies = "<b>safe</b>";
@@ -642,7 +653,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: `let obj = { prop: "<b>safe</b>" };
@@ -657,7 +668,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let msg = '<b>safe</b>'; let altMsg = 'also cool';  if (monday) { msg = altMsg; }; y.innerHTML = msg;",
@@ -666,7 +677,7 @@ eslintTester.run("property", rule, {
                     variableTracing: false,
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,
@@ -683,7 +694,7 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parser: require.resolve("../parsers/fantasy-operator"),
+            ...FANTASY_OPERATOR_OPTIONS,
         },
 
         // Uninitialized variable declaration.
@@ -703,11 +714,11 @@ eslintTester.run("property", rule, {
                     type: "AssignmentExpression",
                 },
             ],
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
         },
         {
             code: "let c; c = 'apparently-safe'; functionCall(c); n.innerHTML = c.property;",
-            parserOptions: { ecmaVersion: 6 },
+            ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,

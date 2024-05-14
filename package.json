@@ -15,15 +15,17 @@
         "@babel/plugin-proposal-nullish-coalescing-operator": "^7.10.4",
         "@babel/plugin-syntax-flow": "^7.16.0",
         "@typescript-eslint/parser": "^5.2.0",
-        "eslint": "^8.1.0",
+        "eslint": "9.0.0",
         "eslint-config-prettier": "9.1.0",
+        "eslint-plugin-jsdoc": "48.2.3",
+        "globals": "^15.0.0",
         "mocha": "^9.2.0",
         "nyc": "^15.1.0",
         "prettier": "3.2.5",
         "typescript": "^3.9.7"
     },
     "peerDependencies": {
-        "eslint": "^6 || ^7 || ^8"
+        "eslint": "^8 || ^9"
     },
     "homepage": "https://github.com/mozilla/eslint-plugin-no-unsanitized/",
     "keywords": [
@@ -53,5 +55,6 @@
         "docs",
         "index.js",
         "lib"
-    ]
+    ],
+    "dependencies": {}
 }
