@@ -11,6 +11,7 @@ const plugin = {
     rules: {
         property: require("./lib/rules/property"),
         method: require("./lib/rules/method"),
+        parsing_method: require("./lib/rules/parsing_method"),
     },
     configs: {},
 };
@@ -18,6 +19,7 @@ const plugin = {
 const rules = {
     "no-unsanitized/property": "error",
     "no-unsanitized/method": "error",
+    "no-unsanitized/parsing_method": "warn",
 };
 
 Object.assign(plugin.configs, {
