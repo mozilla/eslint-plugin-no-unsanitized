@@ -43,6 +43,7 @@
     },
     "scripts": {
         "test": "nyc mocha tests/rules/",
+        "test-integration": "mocha tests/integration/",
         "lint": "eslint . && prettier --check ."
     },
     "files": [
