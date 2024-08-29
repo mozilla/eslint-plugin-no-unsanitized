@@ -14,7 +14,9 @@ const { ESLint } = require("eslint");
 const preESLintv9 = ESLint.version.split(".")[0] < 9;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
-const PATH_TO_TYPESCRIPT_ESLINT = `${process.cwd()}/node_modules/@typescript-eslint/parser/`;
+const PATH_TO_TYPESCRIPT_ESLINT = preESLintv9
+    ? `${process.cwd()}/node_modules/@typescript-eslint/parser/dist`
+    : `@typescript-eslint/parser`;
 
 const babelParser = require(PATH_TO_BABEL_ESLINT);
 const typescriptParser = require(PATH_TO_TYPESCRIPT_ESLINT);
