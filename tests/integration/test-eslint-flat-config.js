@@ -41,8 +41,8 @@ const runEslint = ({ cwd, targetFile }) => {
 
 describe("eslint-flat-config", function () {
     before(function () {
-        // Only run these integration tests while running on esling
-        // versions that suppor the configType flat.
+        // Only run these integration tests while running on eslint
+        // versions that support the configType flat.
         if (ESLint.configType !== "flat") {
             this.skip();
         }
