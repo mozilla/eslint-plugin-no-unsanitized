@@ -23,7 +23,7 @@ eslintTester.run("parsing_method", rule, {
 
     valid: [
         {
-            code: "var doc = DOMParser.parseFromString('static string');",
+            code: "var doc = parser.parseFromString('static string');",
         },
         {
             code: "var doc = Document.parseHTMLUnsafe('static string');",
@@ -34,16 +34,25 @@ eslintTester.run("parsing_method", rule, {
     invalid: [
         /* XXX Do NOT change the error strings below without review from freddy:
          * The strings are optimized for SEO and understandability.
-         * The developer can search for them and will find this MDN article:
-         *  https://developer.mozilla.org/en-US/Firefox_OS/Security/Security_Automation
          */
 
         {
-            code: "var doc = DOMParser.parseFromString(badness);",
+            code: "var doc = domparser.parseFromString(badness);",
             errors: [
                 {
                     message:
-                        /Unsafe call to DOMParser.parseFromString for argument 0/,
+                        /Potentially unsafe call to DOMParser parseFromString \(domparser\.parseFromString\) for argument 0/,
+                    type: "CallExpression",
+                },
+            ],
+        },
+        // Make sure we also warn on DOMParser instance named differently (as long as `parser` is part of the object name).
+        {
+            code: "var doc = parserdom.parseFromString(badness);",
+            errors: [
+                {
+                    message:
+                        /Potentially unsafe call to DOMParser parseFromString \(parserdom\.parseFromString\) for argument 0/,
                     type: "CallExpression",
                 },
             ],
@@ -53,7 +62,17 @@ eslintTester.run("parsing_method", rule, {
             errors: [
                 {
                     message:
-                        /Unsafe call to Document.parseHTMLUnsafe for argument 0/,
+                        /Potentially unsafe call to Document.parseHTMLUnsafe for argument 0/,
+                    type: "CallExpression",
+                },
+            ],
+        },
+        {
+            code: "var doc = SomeDocument.parseHTMLUnsafe(badness);",
+            errors: [
+                {
+                    message:
+                        /Potentially unsafe call to Document.parseHTMLUnsafe \(SomeDocument\.parseHTMLUnsafe\) for argument 0/,
                     type: "CallExpression",
                 },
             ],
