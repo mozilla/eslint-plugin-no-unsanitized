@@ -39,6 +39,6 @@ Object.defineProperty(plugin.configs, "DOM", {
 
         return this["recommended-legacy"];
     }
-}):
+});
 
 module.exports = plugin;
