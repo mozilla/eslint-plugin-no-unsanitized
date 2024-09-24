@@ -25,12 +25,10 @@ Object.assign(plugin.configs, {
         plugins: ["no-unsanitized"],
         rules,
     },
-    recommended: [
-        {
-            plugins: { "no-unsanitized": plugin },
-            rules,
-        },
-    ],
+    recommended: {
+        plugins: { "no-unsanitized": plugin },
+        rules,
+    },
 });
 
 module.exports = plugin;
