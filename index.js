@@ -34,11 +34,13 @@ Object.assign(plugin.configs, {
 });
 Object.defineProperty(plugin.configs, "DOM", {
     enumerable: true,
-    get: function () {
-        console.log("The \"DOM\" configuration of the \"no-unsanitized\" plugin is deprecated. Use \"recommended-legacy\" instead.");
+    get() {
+        console.log(
+            'The "DOM" configuration of the "no-unsanitized" plugin is deprecated. Use "recommended-legacy" instead.'
+        );
 
         return this["recommended-legacy"];
-    }
+    },
 });
 
 module.exports = plugin;
