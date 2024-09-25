@@ -30,5 +30,15 @@ Object.assign(plugin.configs, {
         rules,
     },
 });
+Object.defineProperty(plugin.configs, "DOM", {
+    enumerable: true,
+    get() {
+        console.log(
+            'The "DOM" configuration of the "no-unsanitized" plugin is deprecated. Use "recommended-legacy" instead.'
+        );
+
+        return this["recommended-legacy"];
+    },
+});
 
 module.exports = plugin;
