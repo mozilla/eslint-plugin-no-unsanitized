@@ -1,6 +1,7 @@
 const { readFileSync } = require("fs");
+const path = require("path");
 
-const data = readFileSync("./package.json");
+const data = readFileSync(path.join(__dirname, "package.json"));
 const packageJSON = JSON.parse(data);
 
 const plugin = {
