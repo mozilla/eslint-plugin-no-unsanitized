@@ -33,3 +33,6 @@ jobs:
 
             - name: Test
               run: yarn run test
+
+            - name: Test (integration tests)
+              run: yarn run test-integration
