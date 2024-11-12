@@ -450,6 +450,10 @@ eslintTester.run("method", rule, {
             // # 232: disallow setHTMLUnsafe, but OK with static string.
             code: "foo.setHTMLUnsafe('static string')",
         },
+        {
+            code: "(foo as Function)();",
+            ...TYPESCRIPT_OPTIONS,
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -1055,6 +1059,16 @@ eslintTester.run("method", rule, {
                     type: "CallExpression",
                 },
             ],
+        },
+        {
+            code: "document.write(badness);",
+            errors: [
+                {
+                    message: /Unsafe call to document.write for argument 0/,
+                    type: "CallExpression",
+                },
+            ],
+            ...TYPESCRIPT_OPTIONS,
         },
     ],
 });
