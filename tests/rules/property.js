@@ -734,7 +734,8 @@ eslintTester.run("property", rule, {
             ...ECMA_VERSION_6_ONLY_OPTIONS,
             errors: [
                 {
-                    message: /Unsafe assignment to innerHTML.*Variable 'text' reassigned with unsafe value/,
+                    message:
+                        /Unsafe assignment to innerHTML.*Variable 'text' reassigned with unsafe value/,
                     type: "AssignmentExpression",
                 },
             ],
