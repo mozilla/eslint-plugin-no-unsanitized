@@ -450,6 +450,26 @@ eslintTester.run("method", rule, {
             // # 232: disallow setHTMLUnsafe, but OK with static string.
             code: "foo.setHTMLUnsafe('static string')",
         },
+        {
+            // #263
+            code: `(function () {
+var t = this,
+e = arguments;
+return new Promise(function (r, o) {
+var a = n.apply(t, e);
+
+function i(t) {
+q(a, r, o, i, s, 'next', t);
+}
+
+function s(t) {
+q(a, r, o, i, s, 'throw', t);
+}
+i(void 0);
+});
+})()`,
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
+        },
     ],
 
     // Examples of code that should trigger the rule
