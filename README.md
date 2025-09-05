@@ -74,8 +74,8 @@ export default config = [
         files: ["**/*.js"],
         plugins: { nounsanitized },
         rules: {
-            "no-unsanitized/method": "error",
-            "no-unsanitized/property": "error",
+            "nounsanitized/method": "error",
+            "nounsanitized/property": "error",
         },
     },
 ];
