@@ -61,7 +61,7 @@ $ npm install --save-dev eslint-plugin-no-unsanitized
 ```js
 import nounsanitized from "eslint-plugin-no-unsanitized";
 
-export default config = [nounsanitized.configs.recommended];
+export default [...nounsanitized.configs.recommended];
 ```
 
 or
@@ -69,7 +69,7 @@ or
 ```js
 import nounsanitized from "eslint-plugin-no-unsanitized";
 
-export default config = [
+export default [
     {
         files: ["**/*.js"],
         plugins: { nounsanitized },
