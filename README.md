@@ -59,23 +59,23 @@ $ npm install --save-dev eslint-plugin-no-unsanitized
 ### Flat config
 
 ```js
-import nounsanitized from "eslint-plugin-no-unsanitized";
+import noUnsanitized from "eslint-plugin-no-unsanitized";
 
-export default config = [nounsanitized.configs.recommended];
+export default config = [noUnsanitized.configs.recommended];
 ```
 
 or
 
 ```js
-import nounsanitized from "eslint-plugin-no-unsanitized";
+import noUnsanitized from "eslint-plugin-no-unsanitized";
 
 export default config = [
     {
         files: ["**/*.js"],
-        plugins: { nounsanitized },
+        plugins: { noUnsanitized },
         rules: {
-            "nounsanitized/method": "error",
-            "nounsanitized/property": "error",
+            "noUnsanitized/method": "error",
+            "noUnsanitized/property": "error",
         },
     },
 ];
