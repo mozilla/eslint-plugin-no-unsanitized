@@ -33,7 +33,7 @@ const plugin = {
                 'The "DOM" configuration of the "no-unsanitized" plugin is deprecated. Use "recommended-legacy" instead.'
             );
 
-            return plugin.configs["recommended-legacy"];
+            return this["recommended-legacy"];
         },
     },
 };
