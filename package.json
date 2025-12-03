@@ -13,7 +13,7 @@
         "@babel/eslint-parser": "^7.15.8",
         "@babel/plugin-syntax-flow": "^7.16.0",
         "@typescript-eslint/parser": "^8.0.0",
-        "eslint": "9.0.0 || ^8.57.0",
+        "eslint": "^9.39.1",
         "eslint-config-prettier": "9.1.0",
         "eslint-plugin-jsdoc": "48.2.3",
         "globals": "^15.0.0",
@@ -51,6 +51,7 @@
         "SCHEMA.md",
         "SECURITY.md",
         "docs",
+        "index.d.ts",
         "index.js",
         "lib"
     ]
