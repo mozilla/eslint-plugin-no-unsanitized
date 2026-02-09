@@ -316,7 +316,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -325,7 +324,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -334,7 +332,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -343,7 +340,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to outerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -352,7 +348,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -362,7 +357,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -374,7 +368,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -383,7 +376,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -396,7 +388,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -407,7 +398,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -416,7 +406,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -426,7 +415,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -438,7 +426,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -450,7 +437,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -460,7 +446,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -473,7 +458,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -483,7 +467,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -495,7 +478,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -505,7 +487,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -515,7 +496,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -527,7 +507,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -537,7 +516,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -547,7 +525,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -558,7 +535,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...BABEL_ONLY_OPTIONS,
@@ -568,7 +544,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...BABEL_ONLY_OPTIONS,
@@ -578,7 +553,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...BABEL_ONLY_OPTIONS,
@@ -590,7 +564,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -602,7 +575,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -614,7 +586,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: "Unsafe assignment to innerHTML",
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -625,7 +596,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -636,7 +606,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -652,7 +621,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         /Unsafe assignment to innerHTML \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -667,7 +635,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         /Unsafe assignment to innerHTML \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -683,7 +650,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -693,7 +659,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         "Error in no-unsanitized: Unexpected Assignment. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Operator%20%25C2%25A7%253D%20for%20AssignmentExpression",
-                    type: "AssignmentExpression",
                 },
             ],
             ...FANTASY_OPERATOR_OPTIONS,
@@ -713,7 +678,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,
-                    type: "AssignmentExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -724,7 +688,6 @@ eslintTester.run("property", rule, {
             errors: [
                 {
                     message: /Unsafe assignment to innerHTML/,
-                    type: "AssignmentExpression",
                 },
             ],
         },
@@ -736,7 +699,6 @@ eslintTester.run("property", rule, {
                 {
                     message:
                         /Unsafe assignment to innerHTML.*Variable 'text' reassigned with unsafe value/,
-                    type: "AssignmentExpression",
                 },
             ],
         },
