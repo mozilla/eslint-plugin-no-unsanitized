@@ -10,99 +10,57 @@
 
 const rule = require("../../lib/rules/method");
 const RuleTester = require("eslint").RuleTester;
-const { ESLint } = require("eslint");
-const preESLintv9 = ESLint.version.split(".")[0] < 9;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
-const PATH_TO_TYPESCRIPT_ESLINT = preESLintv9
-    ? `${process.cwd()}/node_modules/@typescript-eslint/parser/dist`
-    : `@typescript-eslint/parser`;
+const PATH_TO_TYPESCRIPT_ESLINT = `@typescript-eslint/parser`;
 
 const babelParser = require(PATH_TO_BABEL_ESLINT);
 const typescriptParser = require(PATH_TO_TYPESCRIPT_ESLINT);
 
-const ECMA_VERSION_6_ONLY_OPTIONS = preESLintv9
-    ? {
-          parserOptions: { ecmaVersion: 6 },
-      }
-    : {
-          languageOptions: { parserOptions: { ecmaVersion: 6 } },
-      };
-const ECMA_VERSION_8_ONLY_OPTIONS = preESLintv9
-    ? {
-          parserOptions: { ecmaVersion: 8 },
-      }
-    : {
-          languageOptions: { parserOptions: { ecmaVersion: 8 } },
-      };
+const ECMA_VERSION_6_ONLY_OPTIONS = {
+    languageOptions: { parserOptions: { ecmaVersion: 6 } },
+};
+const ECMA_VERSION_8_ONLY_OPTIONS = {
+    languageOptions: { parserOptions: { ecmaVersion: 8 } },
+};
 
-const ECMA_VERSION_2020_ONLY_OPTIONS = preESLintv9
-    ? {
-          parserOptions: { ecmaVersion: 2020 },
-      }
-    : {
-          languageOptions: { parserOptions: { ecmaVersion: 2020 } },
-      };
+const ECMA_VERSION_2020_ONLY_OPTIONS = {
+    languageOptions: { parserOptions: { ecmaVersion: 2020 } },
+};
 
-const BABEL_ONLY_OPTIONS = preESLintv9
-    ? {
-          parser: PATH_TO_BABEL_ESLINT,
-      }
-    : {
-          languageOptions: {
-              parser: babelParser,
-          },
-      };
+const BABEL_ONLY_OPTIONS = {
+    languageOptions: {
+        parser: babelParser,
+    },
+};
 
-const BABEL_OPTIONS_FOR_FLOW = preESLintv9
-    ? {
-          parser: PATH_TO_BABEL_ESLINT,
-          parserOptions: {
-              requireConfigFile: false,
-              babelOptions: {
-                  plugins: ["@babel/plugin-syntax-flow"],
-              },
-          },
-      }
-    : {
-          languageOptions: {
-              parser: babelParser,
-              parserOptions: {
-                  requireConfigFile: false,
-                  babelOptions: {
-                      plugins: ["@babel/plugin-syntax-flow"],
-                  },
-              },
-          },
-      };
+const BABEL_OPTIONS_FOR_FLOW = {
+    languageOptions: {
+        parser: babelParser,
+        parserOptions: {
+            requireConfigFile: false,
+            babelOptions: {
+                plugins: ["@babel/plugin-syntax-flow"],
+            },
+        },
+    },
+};
 
-const TYPESCRIPT_OPTIONS = preESLintv9
-    ? {
-          parser: PATH_TO_TYPESCRIPT_ESLINT,
-          parserOptions: {
-              ecmaVersion: 2018,
-              sourceType: "module",
-          },
-      }
-    : {
-          languageOptions: {
-              parser: typescriptParser,
-              parserOptions: {
-                  ecmaVersion: 2018,
-                  sourceType: "module",
-              },
-          },
-      };
+const TYPESCRIPT_OPTIONS = {
+    languageOptions: {
+        parser: typescriptParser,
+        parserOptions: {
+            ecmaVersion: 2018,
+            sourceType: "module",
+        },
+    },
+};
 
-const FANTASY_CALLEE_OPTIONS = preESLintv9
-    ? {
-          parser: require.resolve("../parsers/fantasy-callee"),
-      }
-    : {
-          languageOptions: {
-              parser: require("../parsers/fantasy-callee"),
-          },
-      };
+const FANTASY_CALLEE_OPTIONS = {
+    languageOptions: {
+        parser: require("../parsers/fantasy-callee"),
+    },
+};
 
 //------------------------------------------------------------------------------
 // Tests
@@ -467,7 +425,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -477,7 +434,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -488,7 +444,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to document.write for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -497,7 +452,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to documentish.write for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -507,7 +461,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to documentIframe.write for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -516,7 +469,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -526,7 +478,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to window.document.writeln for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -538,7 +489,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to this().insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -557,7 +507,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Method check requires properties array in eslint rule boop",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -580,11 +529,9 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Method check requires properties array in eslint rule thing",
-                    type: "CallExpression",
                 },
                 {
                     message: "Unsafe call to b.other for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -596,7 +543,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to getDocument(myID).write for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -608,7 +554,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to range.createContextualFragment for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -620,7 +565,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
-                    type: "ImportExpression",
                 },
             ],
         },
@@ -630,7 +574,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
-                    type: "ImportExpression",
                 },
             ],
         },
@@ -640,7 +583,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to import for argument 0",
-                    type: "ImportExpression",
                 },
             ],
         },
@@ -652,7 +594,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -672,7 +613,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to n.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -692,7 +632,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to n.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -718,7 +657,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -731,7 +669,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -741,7 +678,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to document.writeln for argument 0",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -752,7 +688,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "TaggedTemplateExpression",
                 },
             ],
         },
@@ -770,7 +705,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to custom for argument 1",
-                    type: "TaggedTemplateExpression",
                 },
             ],
         },
@@ -788,7 +722,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to custom for argument 2",
-                    type: "TaggedTemplateExpression",
                 },
             ],
         },
@@ -800,7 +733,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to foo.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -812,7 +744,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to foo.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -823,7 +754,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to (await foo)().insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -835,7 +765,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -847,7 +776,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -857,7 +785,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20Literal%20for%20CallExpression",
-                    type: "Literal",
                 },
             ],
         },
@@ -872,7 +799,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node!().insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -883,7 +809,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node!.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -894,7 +819,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to x as HTMLElement.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -908,7 +832,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node: HTMLElement.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -919,7 +842,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to node.insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -929,7 +851,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: "Unsafe call to insertAdjacentHTML for argument 1",
-                    type: "CallExpression",
                 },
             ],
         },
@@ -942,7 +863,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1/,
-                    type: "CallExpression",
                 },
             ],
         },
@@ -952,7 +872,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' initialized with unsafe value at \d+:\d+\)/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -963,7 +882,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'copies' reassigned with unsafe value at \d+:\d+\)/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -976,7 +894,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionDeclaration' at \d+:\d+\)/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -989,7 +906,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'FunctionExpression' at \d+:\d+\)/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -1002,7 +918,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1 \(Variable 'evil' declared as function parameter, which is considered unsafe. 'ArrowFunctionExpression' at \d+:\d+\)/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -1014,7 +929,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Error in no-unsanitized: Unexpected Callee. Please report a minimal code snippet to the developers at https://github.com/mozilla/eslint-plugin-no-unsanitized/issues/new?title=Unsupported%20Callee%20of%20type%20FantasyCallee%20for%20CallExpression",
-                    type: "FantasyCallee",
                 },
             ],
         },
@@ -1032,7 +946,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1/,
-                    type: "CallExpression",
                 },
             ],
             ...ECMA_VERSION_6_ONLY_OPTIONS,
@@ -1043,7 +956,6 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1/,
-                    type: "CallExpression",
                 },
             ],
         },
@@ -1052,7 +964,6 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: /Unsafe call to foo.setHTMLUnsafe for argument 0/,
-                    type: "CallExpression",
                 },
             ],
         },
