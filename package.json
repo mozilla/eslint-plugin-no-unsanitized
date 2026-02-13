@@ -23,7 +23,7 @@
         "typescript": ">=5.9.3"
     },
     "peerDependencies": {
-        "eslint": "^8 || ^9 || ^10"
+        "eslint": "^9 || ^10"
     },
     "homepage": "https://github.com/mozilla/eslint-plugin-no-unsanitized/",
     "keywords": [

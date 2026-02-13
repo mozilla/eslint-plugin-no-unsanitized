@@ -10,84 +10,50 @@
 
 const rule = require("../../lib/rules/property");
 const RuleTester = require("eslint").RuleTester;
-const { ESLint } = require("eslint");
-const preESLintv9 = ESLint.version.split(".")[0] < 9;
 
 const PATH_TO_BABEL_ESLINT = `${process.cwd()}/node_modules/@babel/eslint-parser/`;
-const PATH_TO_TYPESCRIPT_ESLINT = preESLintv9
-    ? `${process.cwd()}/node_modules/@typescript-eslint/parser/dist`
-    : `@typescript-eslint/parser`;
+const PATH_TO_TYPESCRIPT_ESLINT = `@typescript-eslint/parser`;
 
 const babelParser = require(PATH_TO_BABEL_ESLINT);
 const typescriptParser = require(PATH_TO_TYPESCRIPT_ESLINT);
 
-const ECMA_VERSION_6_ONLY_OPTIONS = preESLintv9
-    ? {
-          parserOptions: { ecmaVersion: 6 },
-      }
-    : {
-          languageOptions: { parserOptions: { ecmaVersion: 6 } },
-      };
+const ECMA_VERSION_6_ONLY_OPTIONS = {
+    languageOptions: { parserOptions: { ecmaVersion: 6 } },
+};
 
-const BABEL_ONLY_OPTIONS = preESLintv9
-    ? {
-          parser: PATH_TO_BABEL_ESLINT,
-      }
-    : {
-          languageOptions: {
-              parser: babelParser,
-          },
-      };
+const BABEL_ONLY_OPTIONS = {
+    languageOptions: {
+        parser: babelParser,
+    },
+};
 
-const BABEL_OPTIONS_FOR_FLOW = preESLintv9
-    ? {
-          parser: PATH_TO_BABEL_ESLINT,
-          parserOptions: {
-              requireConfigFile: false,
-              babelOptions: {
-                  plugins: ["@babel/plugin-syntax-flow"],
-              },
-          },
-      }
-    : {
-          languageOptions: {
-              parser: babelParser,
-              parserOptions: {
-                  requireConfigFile: false,
-                  babelOptions: {
-                      plugins: ["@babel/plugin-syntax-flow"],
-                  },
-              },
-          },
-      };
+const BABEL_OPTIONS_FOR_FLOW = {
+    languageOptions: {
+        parser: babelParser,
+        parserOptions: {
+            requireConfigFile: false,
+            babelOptions: {
+                plugins: ["@babel/plugin-syntax-flow"],
+            },
+        },
+    },
+};
 
-const TYPESCRIPT_OPTIONS = preESLintv9
-    ? {
-          parser: PATH_TO_TYPESCRIPT_ESLINT,
-          parserOptions: {
-              ecmaVersion: 2018,
-              sourceType: "module",
-          },
-      }
-    : {
-          languageOptions: {
-              parser: typescriptParser,
-              parserOptions: {
-                  ecmaVersion: 2018,
-                  sourceType: "module",
-              },
-          },
-      };
+const TYPESCRIPT_OPTIONS = {
+    languageOptions: {
+        parser: typescriptParser,
+        parserOptions: {
+            ecmaVersion: 2018,
+            sourceType: "module",
+        },
+    },
+};
 
-const FANTASY_OPERATOR_OPTIONS = preESLintv9
-    ? {
-          parser: require.resolve("../parsers/fantasy-operator"),
-      }
-    : {
-          languageOptions: {
-              parser: require("../parsers/fantasy-operator"),
-          },
-      };
+const FANTASY_OPERATOR_OPTIONS = {
+    languageOptions: {
+        parser: require("../parsers/fantasy-operator"),
+    },
+};
 
 //------------------------------------------------------------------------------
 // Tests
