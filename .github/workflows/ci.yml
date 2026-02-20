@@ -22,14 +22,14 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - name: Use ESLint ${{ matrix.eslint-version }}
-              run: yarn upgrade eslint@${{ matrix.eslint-version }}
-
             - name: Install
-              run: yarn install
+              run: npm ci
+
+            - name: Use ESLint ${{ matrix.eslint-version }}
+              run: npm install eslint@${{ matrix.eslint-version }}
 
             - name: Lint
-              run: yarn run lint
+              run: npm run lint
 
             - name: Test
-              run: yarn run test
+              run: npm run test
