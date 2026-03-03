@@ -15,6 +15,6 @@ and changing their attributes (e.g., `textContent`, `classList`) instead.
 
 ### Further Reading
 
--   Advanced guidance on [Fixing rule violations](fixing-violations.md)
--   This rule has some [customization](customization.md) options that allow you
-    to add or remove functions that should not be called
+- Advanced guidance on [Fixing rule violations](fixing-violations.md)
+- This rule has some [customization](customization.md) options that allow you
+  to add or remove functions that should not be called

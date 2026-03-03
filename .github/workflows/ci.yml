@@ -12,8 +12,8 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                eslint-version: [9.x, 8.x]
-                node-version: [20.x, 18.x]
+                eslint-version: [9.x]
+                node-version: [22.x, 20.x]
         steps:
             - uses: actions/checkout@v4
 
@@ -22,14 +22,14 @@ jobs:
               with:
                   node-version: ${{ matrix.node-version }}
 
-            - name: Use ESLint ${{ matrix.eslint-version }}
-              run: yarn upgrade eslint@${{ matrix.eslint-version }}
-
             - name: Install
-              run: yarn install
+              run: npm ci
+
+            - name: Use ESLint ${{ matrix.eslint-version }}
+              run: npm install eslint@${{ matrix.eslint-version }}
 
             - name: Lint
-              run: yarn run lint
+              run: npm run lint
 
             - name: Test
-              run: yarn run test
+              run: npm run test

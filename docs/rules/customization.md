@@ -23,10 +23,10 @@ Both values are supported and tested in CI.
 
 You can customize the way this rule works in various ways.
 
--   Add to the list of properties or functions to be checked for potentially
-    dangers variable input
--   Add to the list of allowed escaping functions to mitigate security concerns
--   Besides adding to the list, you may override the defaults and provide an exhaustive list yourself
+- Add to the list of properties or functions to be checked for potentially
+  dangers variable input
+- Add to the list of allowed escaping functions to mitigate security concerns
+- Besides adding to the list, you may override the defaults and provide an exhaustive list yourself
 
 ### Disallow the `html` function by specifically checking input for the first function parameter
 
@@ -89,4 +89,4 @@ TBD
 
 #### More
 
--   See [our rule schema definition](https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/main/SCHEMA.md).
+- See [our rule schema definition](https://github.com/mozilla/eslint-plugin-no-unsanitized/blob/main/SCHEMA.md).

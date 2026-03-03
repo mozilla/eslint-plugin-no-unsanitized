@@ -4,6 +4,7 @@ const path = require("path");
 const data = readFileSync(path.join(__dirname, "package.json"));
 const packageJSON = JSON.parse(data);
 
+/** @type {Record<string, "off" | "warn" | "error">} */
 const rules = {
     "no-unsanitized/property": "error",
     "no-unsanitized/method": "error",
