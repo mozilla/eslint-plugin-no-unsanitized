@@ -20,20 +20,9 @@ const plugin = {
         method: require("./lib/rules/method"),
     },
     configs: {
-        "recommended-legacy": {
-            plugins: ["no-unsanitized"],
-            rules,
-        },
         recommended: {
             plugins: { "no-unsanitized": {} },
             rules,
-        },
-        get DOM() {
-            console.log(
-                'The "DOM" configuration of the "no-unsanitized" plugin is deprecated. Use "recommended-legacy" instead.'
-            );
-
-            return this["recommended-legacy"];
         },
     },
 };
