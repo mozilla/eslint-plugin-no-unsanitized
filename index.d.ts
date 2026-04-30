@@ -12,7 +12,6 @@ declare const plugin: {
         method: PluginRule;
     };
     configs: {
-        "recommended-legacy": Linter.LegacyConfig<Linter.RulesRecord>;
         recommended: Linter.Config<Linter.RulesRecord>;
     };
 };
