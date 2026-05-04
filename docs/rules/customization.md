@@ -83,6 +83,42 @@ You can customize the way this rule works in various ways.
 }
 ```
 
+### Allow innerHTML when assignment happens through third-party sanitization library (DOMPurify)
+
+**DOMPurify:**
+
+Allow `DOMPurify.sanitize` method:
+
+```html    
+<script>
+    document.querySelector("p").innerHTML = DOMPurify.sanitize( unsafeHTML );
+</script>
+```
+
+Configuration:
+
+```js
+{
+    plugins: { nounsanitized },
+    rules: {
+      "nounsanitized/method": [
+        "error",
+        { 
+            "escape": { 
+                "methods": ["DOMPurify.sanitize"] 
+            } 
+        }],
+      "nounsanitized/property": [
+        "error", 
+        { 
+            "escape": { 
+                "methods": ["DOMPurify.sanitize"] 
+            } 
+        }],
+    },
+}
+```
+
 ### Override list of escaping functions for property assignments only
 
 TBD
