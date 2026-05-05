@@ -395,6 +395,12 @@ eslintTester.run("method", rule, {
             code: "(info.current = n.insertAdjacentHTML)('beforebegin', 'innocent')",
         },
         {
+            code: "foo.bind(bar).baz()",
+        },
+        {
+            code: 'document.body.insertAdjacentHTML.bind(document.body)("afterend", "harmless")',
+        },
+        {
             // #214: We also allow *harmful* parameters.
             code: "let l = ['afterend', 'harmless']; foo.insertAdjacentHTML(...l);",
             ...ECMA_VERSION_2020_ONLY_OPTIONS,
@@ -956,6 +962,15 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         /Unsafe call to n.insertAdjacentHTML for argument 1/,
+                },
+            ],
+        },
+        {
+            code: 'document.body.insertAdjacentHTML.bind(document.body)("afterend", foo)',
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
                 },
             ],
         },
