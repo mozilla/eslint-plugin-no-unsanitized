@@ -345,6 +345,10 @@ eslintTester.run("method", rule, {
             code: "node!().insertAdjacentHTML('beforebegin', 'raw string');",
             ...TYPESCRIPT_OPTIONS,
         },
+        {
+            code: "(foo as Function)();",
+            ...TYPESCRIPT_OPTIONS,
+        },
 
         // Flow support tests
         {
@@ -819,6 +823,15 @@ eslintTester.run("method", rule, {
                 {
                     message:
                         "Unsafe call to x as HTMLElement.insertAdjacentHTML for argument 1",
+                },
+            ],
+        },
+        {
+            code: "(document.write as Function)(evil)",
+            ...TYPESCRIPT_OPTIONS,
+            errors: [
+                {
+                    message: "Unsafe call to document.write for argument 0",
                 },
             ],
         },
