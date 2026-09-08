@@ -12,8 +12,8 @@ jobs:
         runs-on: ubuntu-latest
         strategy:
             matrix:
-                eslint-version: [9.x]
-                node-version: [22.x, 20.x]
+                eslint-version: [9.x, 10.x]
+                node-version: [24.x, 22.x]
         steps:
             - uses: actions/checkout@v7
 
