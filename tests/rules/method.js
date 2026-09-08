@@ -408,6 +408,35 @@ eslintTester.run("method", rule, {
             // # 232: disallow setHTMLUnsafe, but OK with static string.
             code: "foo.setHTMLUnsafe('static string')",
         },
+        {
+            // #115: `baz` is called on the bound function, and is not a sink.
+            code: "foo.bind(bar).baz()",
+        },
+        {
+            code: 'document.body.insertAdjacentHTML.bind(document.body)("afterend", "harmless")',
+        },
+        {
+            // #115: bind() may also provide the arguments.
+            code: 'document.body.insertAdjacentHTML.bind(document.body, "afterend", "harmless")()',
+        },
+        {
+            // #115: the result of a call that is not a bind() stays unknown.
+            code: "getInserter()('afterend', evil)",
+        },
+        {
+            // #115: a spread `thisArg` may carry prepended arguments as well,
+            // so we cannot tell where `evil` ends up. Like #214, we allow it.
+            code: "document.body.insertAdjacentHTML.bind(...l)('afterend', evil);",
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
+        },
+        {
+            // #115: binding a callee we cannot name must stay quiet, rather
+            // than report it as an unsupported callee.
+            code: "(class {}).bind(null)()",
+        },
+        {
+            code: "({ f: 1 }).bind(null)()",
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -964,6 +993,66 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: /Unsafe call to foo.setHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            // #115: bound calls are checked like direct calls.
+            code: 'document.body.insertAdjacentHTML.bind(document.body)("afterend", foo)',
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
+                },
+            ],
+        },
+        {
+            // #115: bind() may also provide the arguments.
+            code: 'document.body.insertAdjacentHTML.bind(document.body, "afterend")(foo)',
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
+                },
+            ],
+        },
+        {
+            // #115: objectMatches still applies to the bound method.
+            code: "document.write.bind(document)(foo)",
+            errors: [
+                {
+                    message: /Unsafe call to document.write for argument 0/,
+                },
+            ],
+        },
+        {
+            // #115: binding an already bound function.
+            code: 'document.body.insertAdjacentHTML.bind(a).bind(b)("afterend", foo)',
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
+                },
+            ],
+        },
+        {
+            // #115: a trailing spread does not hide the arguments before it.
+            code: "document.body.insertAdjacentHTML.bind(document.body, 'afterend', foo, ...rest)()",
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
+                },
+            ],
+            ...ECMA_VERSION_2020_ONLY_OPTIONS,
+        },
+        {
+            // #115: binding an already reported call reports it just once.
+            code: "(document.body.insertAdjacentHTML`afterend${foo}`).bind(null)()",
+            errors: [
+                {
+                    message:
+                        /Unsafe call to document.body.insertAdjacentHTML for argument 1/,
                 },
             ],
         },
