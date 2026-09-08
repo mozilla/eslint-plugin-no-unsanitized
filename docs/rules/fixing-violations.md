@@ -10,7 +10,7 @@ your code would look like this:
 foo.innerHTML = DOMPurify.sanitize(<a href="${link}">click</a>);
 ```
 
-Please also see the [customization docs](customization.md] to
+Please also see the [customization docs](customization.md) to
 change the allowed sanitizer calls.
 
 # That still does not solve my problem
