@@ -51,6 +51,7 @@
         "SCHEMA.md",
         "SECURITY.md",
         "docs",
+        "index.d.ts",
         "index.js",
         "lib"
     ]

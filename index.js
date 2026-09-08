@@ -30,3 +30,9 @@ const plugin = {
 plugin.configs.recommended.plugins["no-unsanitized"] = plugin;
 
 module.exports = plugin;
+// Re-assign each property so Node's cjs-module-lexer can statically detect the
+// named exports that the TypeScript types advertise (meta, rules, configs).
+// Without this, ESM named imports type-check but crash at runtime.
+module.exports.meta = plugin.meta;
+module.exports.rules = plugin.rules;
+module.exports.configs = plugin.configs;
