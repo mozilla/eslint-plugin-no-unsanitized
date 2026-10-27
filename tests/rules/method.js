@@ -408,6 +408,26 @@ eslintTester.run("method", rule, {
             // # 232: disallow setHTMLUnsafe, but OK with static string.
             code: "foo.setHTMLUnsafe('static string')",
         },
+        {
+            // # 307: disallow replaceWithHTMLUnsafe, but OK with static string.
+            code: "foo.replaceWithHTMLUnsafe('static string')",
+        },
+        {
+            // # 307: disallow beforeHTMLUnsafe, but OK with static string.
+            code: "foo.beforeHTMLUnsafe('static string')",
+        },
+        {
+            // # 307: disallow prependHTMLUnsafe, but OK with static string.
+            code: "foo.prependHTMLUnsafe('static string')",
+        },
+        {
+            // # 307: disallow appendHTMLUnsafe, but OK with static string.
+            code: "foo.appendHTMLUnsafe('static string')",
+        },
+        {
+            // # 307: disallow afterHTMLUnsafe, but OK with static string.
+            code: "foo.afterHTMLUnsafe('static string')",
+        },
     ],
 
     // Examples of code that should trigger the rule
@@ -964,6 +984,46 @@ eslintTester.run("method", rule, {
             errors: [
                 {
                     message: /Unsafe call to foo.setHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            code: "foo.replaceWithHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.replaceWithHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            code: "foo.beforeHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.beforeHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            code: "foo.prependHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.prependHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            code: "foo.appendHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.appendHTMLUnsafe for argument 0/,
+                },
+            ],
+        },
+        {
+            code: "foo.afterHTMLUnsafe(badness)",
+            errors: [
+                {
+                    message: /Unsafe call to foo.afterHTMLUnsafe for argument 0/,
                 },
             ],
         },
