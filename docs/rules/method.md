@@ -13,6 +13,14 @@ variable parameter, as this might cause Cross-Site Scripting (XSS)
 vulnerabilities. We encourage you to construct DOM nodes using `createElement`
 and changing their attributes (e.g., `textContent`, `classList`) instead.
 
+When using a TypeScript parser, calls wrapped in an `as` assertion are checked
+in the same way as direct calls:
+
+```ts
+(document.write as (html: string) => void)(input.value); // Disallowed.
+(document.write as (html: string) => void)("static text"); // Allowed.
+```
+
 ### Further Reading
 
 - Advanced guidance on [Fixing rule violations](fixing-violations.md)

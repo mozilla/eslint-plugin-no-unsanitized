@@ -334,6 +334,18 @@ eslintTester.run("method", rule, {
 
         // Typescript support tests
         {
+            code: "(foo as () => void)();",
+            ...TYPESCRIPT_OPTIONS,
+        },
+        {
+            code: "(document.write as (html: string) => void)('static string');",
+            ...TYPESCRIPT_OPTIONS,
+        },
+        {
+            code: "(document.write as (html: string) => void)(Sanitizer.escapeHTML`<em>${evil}</em>`);",
+            ...TYPESCRIPT_OPTIONS,
+        },
+        {
             code: "node.insertAdjacentHTML('beforebegin', (5 as string));",
             ...TYPESCRIPT_OPTIONS,
         },
@@ -790,6 +802,34 @@ eslintTester.run("method", rule, {
         },
 
         // Typescript test cases
+        {
+            code: "(document.write as (html: string) => void)(evil);",
+            ...TYPESCRIPT_OPTIONS,
+            errors: [
+                {
+                    message: "Unsafe call to document.write for argument 0",
+                },
+            ],
+        },
+        {
+            code: "(node.insertAdjacentHTML as (...args: string[]) => void)('beforebegin', evil);",
+            ...TYPESCRIPT_OPTIONS,
+            errors: [
+                {
+                    message:
+                        "Unsafe call to node.insertAdjacentHTML for argument 1",
+                },
+            ],
+        },
+        {
+            code: "((document.write as unknown) as (html: string) => void)(evil);",
+            ...TYPESCRIPT_OPTIONS,
+            errors: [
+                {
+                    message: "Unsafe call to document.write for argument 0",
+                },
+            ],
+        },
         //
         // Null coalescing operator
         {
